@@ -24,23 +24,8 @@ const app = {
     },
 
     // --- AUTH ---
-    sendOtp: function() {
-        const phone = document.getElementById('login-phone').value;
-        if(phone.length < 10) {
-            alert("Please enter a valid phone number");
-            return;
-        }
-        document.getElementById('otp-section').style.display = 'block';
-        this.log(`OTP sent to ${phone}`);
-    },
-
-    verifyOtp: function() {
-        const otp = document.getElementById('login-otp').value;
-        if(otp === '1122') {
-            this.loginSuccess();
-        } else {
-            alert("Invalid OTP (Try 1122)");
-        }
+    login: function() {
+        this.loginSuccess();
     },
 
     loginSuccess: function(isAutoLogin = false) {
@@ -50,6 +35,11 @@ const app = {
         document.getElementById('screen-login').classList.remove('active');
         document.getElementById('screen-home').classList.add('active');
         
+        // Show disclaimer popup
+        setTimeout(() => {
+            document.getElementById('disclaimer-popup').classList.add('show');
+        }, 1000);
+
         if(isAutoLogin) {
             this.log("User auto-logged in from session.");
         } else {
@@ -62,14 +52,16 @@ const app = {
         }, 500);
     },
 
+    closeDisclaimer: function() {
+        document.getElementById('disclaimer-popup').classList.remove('show');
+    },
+
     logout: function() {
         this.state.isLoggedIn = false;
         localStorage.removeItem('isLoggedIn');
         
         document.querySelectorAll('.app-screen').forEach(el => el.classList.remove('active'));
         document.getElementById('screen-login').classList.add('active');
-        document.getElementById('otp-section').style.display = 'none';
-        document.getElementById('login-otp').value = '';
         this.log("User logged out.");
     },
 
@@ -188,7 +180,7 @@ const app = {
             // Update status text
             const statusEl = document.getElementById('tracking-status');
             if(statusEl) {
-                statusEl.innerText = this.state.isTruckMoving ? "Arriving in 2 mins" : "Driver Online";
+                statusEl.innerText = this.state.isTruckMoving ? "Arriving in 2 mins" : "Rider Online";
             }
         }
     },
@@ -221,8 +213,12 @@ const app = {
         
         // Play sound
         try {
-            const audio = new Audio('assets/sounds/truck_alert.mp3');
-            audio.play().catch(e => {
+            if (this.notificationAudio) {
+                this.notificationAudio.pause();
+                this.notificationAudio.currentTime = 0;
+            }
+            this.notificationAudio = new Audio('assets/sounds/truck_alert.mp3');
+            this.notificationAudio.play().catch(e => {
                 this.log("⚠️ Audio blocked by browser. Interact with page first.");
             });
         } catch (e) {
@@ -234,6 +230,10 @@ const app = {
 
     closeNotification: function() {
         document.getElementById('notification-popup').classList.remove('show');
+        if (this.notificationAudio) {
+            this.notificationAudio.pause();
+            this.notificationAudio.currentTime = 0;
+        }
     },
 
     log: function(msg) {
@@ -266,7 +266,7 @@ const sim = {
         if(app.state.isDriverOnline) {
             statusText.innerText = "Online";
             statusDot.classList.add('online');
-            app.log("Driver is now ONLINE.");
+            app.log("Rider is now ONLINE.");
             
             // Show truck on map at start position
             app.state.truckLocation = this.route[0];
@@ -274,7 +274,7 @@ const sim = {
         } else {
             statusText.innerText = "Offline";
             statusDot.classList.remove('online');
-            app.log("Driver went OFFLINE.");
+            app.log("Rider went OFFLINE.");
             
             // Remove markers
             if(app.truckMarker && app.map) {
@@ -288,7 +288,7 @@ const sim = {
             
             // Update tracking status text
             const trackStatus = document.getElementById('tracking-status');
-            if(trackStatus) trackStatus.innerText = "Driver Offline";
+            if(trackStatus) trackStatus.innerText = "Rider Offline";
 
             this.resetRoute();
         }
@@ -296,7 +296,7 @@ const sim = {
 
     startRoute: function() {
         if(!app.state.isDriverOnline) {
-            alert("Please switch Driver to ONLINE first.");
+            alert("Please switch Rider to ONLINE first.");
             return;
         }
         if(app.state.isTruckMoving) return;

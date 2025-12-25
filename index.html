@@ -32,25 +32,22 @@
                                 <p>Trash Buddy App</p>
                             </div>
                             <div class="form-area">
-                                <div class="input-group">
-                                    <i class="fa-solid fa-phone"></i>
-                                    <input type="tel" id="login-phone" placeholder="Enter Phone Number" value="9999999999">
-                                </div>
-                                <button class="btn-primary" onclick="app.sendOtp()">Get OTP</button>
-                                
-                                <div id="otp-section" style="display:none; margin-top: 20px;">
-                                    <div class="input-group">
-                                        <i class="fa-solid fa-lock"></i>
-                                        <input type="text" id="login-otp" placeholder="Enter OTP (1122)">
-                                    </div>
-                                    <button class="btn-primary" onclick="app.verifyOtp()">Login</button>
-                                </div>
+                                <button class="btn-primary" onclick="app.login()">Login</button>
                             </div>
                         </div>
                     </div>
 
                     <!-- SCREEN 2: HOME / DASHBOARD -->
                     <div id="screen-home" class="app-screen">
+                        <!-- Disclaimer Popup -->
+                        <div id="disclaimer-popup" class="disclaimer-popup">
+                            <div class="disclaimer-content">
+                                <h4>Simulation Dashboard</h4>
+                                <p>This is only a simulation dashboard and the website does not track any data of the user.</p>
+                                <button class="btn-primary" onclick="app.closeDisclaimer()">I Understand</button>
+                            </div>
+                        </div>
+
                         <!-- Sticky Header -->
                         <div class="app-header">
                             <div class="header-top">
@@ -102,16 +99,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Notification Popup Overlay -->
-                        <div id="notification-popup" class="notification-popup">
-                            <div class="notif-icon">🔔</div>
-                            <div class="notif-content">
-                                <h4>Waste Truck Nearby!</h4>
-                                <p>The collection truck is approaching your location.</p>
-                            </div>
-                            <button class="close-notif" onclick="app.closeNotification()">×</button>
-                        </div>
                     </div>
 
                     <!-- SCREEN 3: UPDATE LOCATION -->
@@ -151,6 +138,16 @@
                                 <div class="status-badge" id="tracking-status">Connecting...</div>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Notification Popup Overlay -->
+                    <div id="notification-popup" class="notification-popup">
+                        <div class="notif-icon">🔔</div>
+                        <div class="notif-content">
+                            <h4>Waste Truck Nearby!</h4>
+                            <p>The collection truck is approaching your location.</p>
+                        </div>
+                        <button class="close-notif" onclick="app.closeNotification()">×</button>
                     </div>
 
                 </div>
