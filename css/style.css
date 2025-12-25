@@ -331,6 +331,13 @@ body {
     padding: 20px;
     border-radius: 15px;
     border: 1px solid #eee;
+    color: #000000;
+}
+
+.control-group h3,
+.control-group p,
+.control-group span {
+    color: #000000;
 }
 
 .btn-secondary {
@@ -558,8 +565,14 @@ body {
         color: #fff;
     }
 
-    .control-panel h2, .control-panel h3, .control-panel p {
+    .control-panel h2, .control-panel > p {
         color: #eee;
+    }
+
+    .control-group h3, 
+    .control-group p, 
+    .control-group span {
+        color: #000000;
     }
     
     .console-log {

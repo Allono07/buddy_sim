@@ -15,7 +15,7 @@
     <div class="main-container">
         <!-- Mobile Hint -->
         <div class="mobile-hint">
-            <i class="fa-solid fa-arrow-down"></i> Pull down to control the simulation
+            <i class="fa-solid fa-arrow-down"></i> Scroll down to control the simulation
         </div>
 
         <!-- LEFT SIDE: THE APP SIMULATOR -->
@@ -34,7 +34,7 @@
                             <div class="form-area">
                                 <div class="input-group">
                                     <i class="fa-solid fa-phone"></i>
-                                    <input type="tel" id="login-phone" placeholder="Enter Phone Number" value="9876543210">
+                                    <input type="tel" id="login-phone" placeholder="Enter Phone Number" value="9999999999">
                                 </div>
                                 <button class="btn-primary" onclick="app.sendOtp()">Get OTP</button>
                                 
@@ -168,7 +168,7 @@
                     <span id="driver-status-text">Offline</span>
                     <div class="status-dot" id="driver-status-dot"></div>
                 </div>
-                <button class="btn-secondary" onclick="sim.toggleDriver()">Toggle Trucks Online</button>
+                <button class="btn-secondary" onclick="sim.toggleDriver()">Click to bring Trucks Online</button>
             </div>
 
             <div class="control-group">
@@ -178,7 +178,7 @@
                     <div class="progress-bar" id="truck-progress"></div>
                 </div>
                 <div class="btn-row">
-                    <button class="btn-secondary" onclick="sim.startRoute()">Start Route</button>
+                    <button class="btn-secondary" onclick="sim.startRoute()">Start Truck</button>
                     <button class="btn-secondary" onclick="sim.resetRoute()">Reset</button>
                 </div>
             </div>
