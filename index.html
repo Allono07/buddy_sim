@@ -150,6 +150,16 @@
                         <button class="close-notif" onclick="app.closeNotification()">×</button>
                     </div>
 
+                    <!-- Mobile Simulation Controls (Sticky) -->
+                    <div class="sim-fab-container">
+                        <button id="fab-online" class="sim-fab" onclick="sim.toggleDriver()" title="Toggle Driver Online">
+                            <i class="fa-solid fa-power-off"></i>
+                        </button>
+                        <button id="fab-start" class="sim-fab" onclick="sim.startRoute()" title="Start Route">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -159,7 +169,7 @@
             <h2>🛠️ Simulation Control</h2>
             <p>Use this panel to simulate real-world events.</p>
 
-            <div class="control-group">
+            <div class="control-group" id="ctrl-status">
                 <h3>1. Truck Status</h3>
                 <div class="status-indicator">
                     <span id="driver-status-text">Offline</span>
@@ -168,7 +178,7 @@
                 <button class="btn-secondary" onclick="sim.toggleDriver()">Click to bring Trucks Online</button>
             </div>
 
-            <div class="control-group">
+            <div class="control-group" id="ctrl-movement">
                 <h3>2. Truck Movement</h3>
                 <p>Simulate the truck moving towards the user's home.</p>
                 <div class="progress-bar-container">

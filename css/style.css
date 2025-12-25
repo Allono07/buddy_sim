@@ -622,6 +622,11 @@ body {
         background-color: #000;
         color: #0f0;
     }
+
+    /* Hide redundant controls on mobile */
+    #ctrl-status, #ctrl-movement {
+        display: none;
+    }
 }
 
 /* --- MOBILE HINT --- */
@@ -663,4 +668,47 @@ body {
     body {
         padding-top: 40px;
     }
+}
+
+/* --- SIMULATION FABs --- */
+.sim-fab-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 900;
+}
+
+.sim-fab {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    color: #777;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.sim-fab:hover {
+    transform: scale(1.1);
+}
+
+.sim-fab.active {
+    background: #4CAF50;
+    color: white;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.sim-fab.running {
+    background: #2196F3;
+    color: white;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
 }

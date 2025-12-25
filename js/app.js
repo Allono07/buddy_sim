@@ -21,6 +21,11 @@ const app = {
         if (localStorage.getItem('isLoggedIn') === 'true') {
             this.loginSuccess(true); // Pass true to skip animation/delay if needed
         }
+
+        // Check for persistent theme
+        if (localStorage.getItem('theme') === 'dark') {
+            this.applyTheme('dark');
+        }
     },
 
     // --- AUTH ---
@@ -190,19 +195,36 @@ const app = {
         alert(msg); // Simple alert for now
     },
 
-    toggleTheme: function() {
+    applyTheme: function(theme) {
         const phoneScreen = document.querySelector('.phone-screen');
         const icon = document.getElementById('theme-icon');
         
-        if (phoneScreen.getAttribute('data-theme') === 'dark') {
+        if (theme === 'dark') {
+            phoneScreen.setAttribute('data-theme', 'dark');
+            if(icon) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+            localStorage.setItem('theme', 'dark');
+        } else {
             phoneScreen.removeAttribute('data-theme');
-            icon.classList.remove('fa-sun');
-            icon.classList.add('fa-moon');
+            if(icon) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+            localStorage.setItem('theme', 'light');
+        }
+    },
+
+    toggleTheme: function() {
+        const phoneScreen = document.querySelector('.phone-screen');
+        const currentTheme = phoneScreen.getAttribute('data-theme');
+        
+        if (currentTheme === 'dark') {
+            this.applyTheme('light');
             this.log("Switched to Light Mode");
         } else {
-            phoneScreen.setAttribute('data-theme', 'dark');
-            icon.classList.remove('fa-moon');
-            icon.classList.add('fa-sun');
+            this.applyTheme('dark');
             this.log("Switched to Dark Mode");
         }
     },
@@ -262,10 +284,12 @@ const sim = {
         app.state.isDriverOnline = !app.state.isDriverOnline;
         const statusText = document.getElementById('driver-status-text');
         const statusDot = document.getElementById('driver-status-dot');
+        const fabOnline = document.getElementById('fab-online');
         
         if(app.state.isDriverOnline) {
             statusText.innerText = "Online";
             statusDot.classList.add('online');
+            fabOnline.classList.add('active');
             app.log("Rider is now ONLINE.");
             
             // Show truck on map at start position
@@ -274,6 +298,7 @@ const sim = {
         } else {
             statusText.innerText = "Offline";
             statusDot.classList.remove('online');
+            fabOnline.classList.remove('active');
             app.log("Rider went OFFLINE.");
             
             // Remove markers
@@ -302,6 +327,7 @@ const sim = {
         if(app.state.isTruckMoving) return;
 
         app.state.isTruckMoving = true;
+        document.getElementById('fab-start').classList.add('running');
         app.log("🚚 Truck started route...");
         
         this.currentStep = 0;
@@ -336,6 +362,7 @@ const sim = {
         app.state.isTruckMoving = false;
         this.currentStep = 0;
         document.getElementById('truck-progress').style.width = '0%';
+        document.getElementById('fab-start').classList.remove('running');
         app.closeNotification();
         
         if(app.state.isDriverOnline) {
@@ -347,6 +374,7 @@ const sim = {
     finishRoute: function() {
         clearInterval(app.routeInterval);
         app.state.isTruckMoving = false;
+        document.getElementById('fab-start').classList.remove('running');
         app.log("Truck arrived at location.");
         const trackStatus = document.getElementById('tracking-status');
         if(trackStatus) trackStatus.innerText = "Arrived";
