@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Buddy Simulation</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="main-container">
+        <!-- Mobile Hint -->
+        <div class="mobile-hint">
+            <i class="fa-solid fa-arrow-down"></i> Pull down to control the simulation
+        </div>
+
+        <!-- LEFT SIDE: THE APP SIMULATOR -->
+        <div class="phone-wrapper">
+            <div class="phone-bezel">
+                <div class="phone-screen">
+                    
+                    <!-- SCREEN 1: LOGIN -->
+                    <div id="screen-login" class="app-screen active">
+                        <div class="login-content">
+                            <div class="logo-area">
+                                <img src="assets/images/trash_buddy.png" alt="Trash Buddy" class="app-logo">
+                                <h1>Trash Buddy</h1>
+                                <p>Trash Buddy App</p>
+                            </div>
+                            <div class="form-area">
+                                <div class="input-group">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <input type="tel" id="login-phone" placeholder="Enter Phone Number" value="9876543210">
+                                </div>
+                                <button class="btn-primary" onclick="app.sendOtp()">Get OTP</button>
+                                
+                                <div id="otp-section" style="display:none; margin-top: 20px;">
+                                    <div class="input-group">
+                                        <i class="fa-solid fa-lock"></i>
+                                        <input type="text" id="login-otp" placeholder="Enter OTP (1122)">
+                                    </div>
+                                    <button class="btn-primary" onclick="app.verifyOtp()">Login</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SCREEN 2: HOME / DASHBOARD -->
+                    <div id="screen-home" class="app-screen">
+                        <!-- Sticky Header -->
+                        <div class="app-header">
+                            <div class="header-top">
+                                <div class="user-info">
+                                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                    <div class="text">
+                                        <small>Welcome back,</small>
+                                        <strong>Resident</strong>
+                                    </div>
+                                </div>
+                                <div class="header-actions">
+                                    <button class="btn-icon" onclick="app.toggleTheme()" title="Toggle Theme"><i class="fa-solid fa-moon" id="theme-icon"></i></button>
+                                    <button class="btn-icon" onclick="app.logout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="scroll-content">
+                            <!-- Mascot Hero -->
+                            <div class="hero-section">
+                                <div class="mascot-container">
+                                    <img src="assets/images/trash_buddy.png" alt="Mascot">
+                                </div>
+                            </div>
+
+                            <div class="dashboard-content">
+                                <h3>Your Location</h3>
+                                <div id="user-map" class="map-container"></div>
+                                <div class="location-status" id="location-status">
+                                    <i class="fa-solid fa-location-dot"></i> Location Registered
+                                </div>
+
+                                <h3>Quick Actions</h3>
+                                <div class="action-cards">
+                                    <div class="card" onclick="app.openLocationScreen()">
+                                        <div class="icon-box blue"><i class="fa-solid fa-map-location-dot"></i></div>
+                                        <div class="card-text">
+                                            <strong>Update Location</strong>
+                                            <small>Set your home</small>
+                                        </div>
+                                    </div>
+                                    <div class="card" onclick="app.openTrackingScreen()">
+                                        <div class="icon-box green"><i class="fa-solid fa-truck-fast"></i></div>
+                                        <div class="card-text">
+                                            <strong>Track Vehicle</strong>
+                                            <small>Live status</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notification Popup Overlay -->
+                        <div id="notification-popup" class="notification-popup">
+                            <div class="notif-icon">🔔</div>
+                            <div class="notif-content">
+                                <h4>Waste Truck Nearby!</h4>
+                                <p>The collection truck is approaching your location.</p>
+                            </div>
+                            <button class="close-notif" onclick="app.closeNotification()">×</button>
+                        </div>
+                    </div>
+
+                    <!-- SCREEN 3: UPDATE LOCATION -->
+                    <div id="screen-location" class="app-screen">
+                        <div class="screen-header">
+                            <button class="btn-icon back-btn" onclick="app.goBack()"><i class="fa-solid fa-arrow-left"></i></button>
+                            <h2>Update Location</h2>
+                        </div>
+                        <div class="screen-content">
+                            <div id="location-map" class="full-map"></div>
+                            <div class="bottom-sheet">
+                                <div class="input-group">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <input type="text" value="123, Green Street, Bangalore" readonly>
+                                </div>
+                                <button class="btn-primary" onclick="app.saveLocation()">Confirm Location</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SCREEN 4: TRACKING -->
+                    <div id="screen-tracking" class="app-screen">
+                        <div class="screen-header">
+                            <button class="btn-icon back-btn" onclick="app.goBack()"><i class="fa-solid fa-arrow-left"></i></button>
+                            <h2>Live Tracking</h2>
+                        </div>
+                        <div class="screen-content">
+                            <div id="tracking-map" class="full-map"></div>
+                            <div class="driver-info-card">
+                                <div class="driver-details">
+                                    <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+                                    <div>
+                                        <strong>Rider: Allen Thomson</strong>
+                                        <small>Vehicle: KA-01-1234</small>
+                                    </div>
+                                </div>
+                                <div class="status-badge" id="tracking-status">Connecting...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: SIMULATION CONTROLS -->
+        <div class="control-panel">
+            <h2>🛠️ Simulation Control</h2>
+            <p>Use this panel to simulate real-world events.</p>
+
+            <div class="control-group">
+                <h3>1. Truck Status</h3>
+                <div class="status-indicator">
+                    <span id="driver-status-text">Offline</span>
+                    <div class="status-dot" id="driver-status-dot"></div>
+                </div>
+                <button class="btn-secondary" onclick="sim.toggleDriver()">Toggle Trucks Online</button>
+            </div>
+
+            <div class="control-group">
+                <h3>2. Truck Movement</h3>
+                <p>Simulate the truck moving towards the user's home.</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="truck-progress"></div>
+                </div>
+                <div class="btn-row">
+                    <button class="btn-secondary" onclick="sim.startRoute()">Start Route</button>
+                    <button class="btn-secondary" onclick="sim.resetRoute()">Reset</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>3. Events</h3>
+                <button class="btn-warning" onclick="sim.triggerNotification()">Force Notification</button>
+            </div>
+
+            <div class="console-log" id="sim-console">
+                <div>> System ready...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
