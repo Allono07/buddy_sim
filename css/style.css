@@ -230,6 +230,27 @@ body {
     overflow: hidden;
 }
 
+.map-center-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    background: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 400; /* Above Leaflet controls */
+    color: var(--text-color);
+    transition: background 0.2s;
+}
+
+.map-center-btn:hover {
+    background: #f0f0f0;
+}
+
 .action-cards {
     display: flex;
     gap: 15px;

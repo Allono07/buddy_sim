@@ -103,6 +103,12 @@ const app = {
     },
 
     // --- MAPS ---
+    centerMap: function() {
+        if(this.map && this.state.userLocation) {
+            this.map.setView(this.state.userLocation, 15);
+        }
+    },
+
     initMap: function() {
         if(this.map) return; // Already initialized
 
@@ -157,11 +163,11 @@ const app = {
     },
 
     updateTruckMarker: function(lat, lng) {
-        const truckIcon = L.divIcon({
-            html: '<i class="fa-solid fa-truck" style="color: #2e7d32; font-size: 24px;"></i>',
-            className: 'custom-div-icon',
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
+        const truckIcon = L.icon({
+            iconUrl: 'assets/images/rider_app.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
         });
 
         // Update Home Map

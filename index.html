@@ -75,7 +75,12 @@
 
                             <div class="dashboard-content">
                                 <h3>Your Location</h3>
-                                <div id="user-map" class="map-container"></div>
+                                <div style="position: relative;">
+                                    <div id="user-map" class="map-container"></div>
+                                    <button class="btn-icon map-center-btn" onclick="app.centerMap()" title="Center on Me">
+                                        <i class="fa-solid fa-crosshairs"></i>
+                                    </button>
+                                </div>
                                 <div class="location-status" id="location-status">
                                     <i class="fa-solid fa-location-dot"></i> Location Registered
                                 </div>
@@ -90,7 +95,7 @@
                                         </div>
                                     </div>
                                     <div class="card" onclick="app.openTrackingScreen()">
-                                        <div class="icon-box green"><i class="fa-solid fa-truck-fast"></i></div>
+                                        <div class="icon-box green"><img src="assets/images/rider_app.png" alt="Truck" style="width: 24px; height: 24px;"></div>
                                         <div class="card-text">
                                             <strong>Track Vehicle</strong>
                                             <small>Live status</small>
