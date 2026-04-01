@@ -79,6 +79,15 @@ body {
     text-align: center;
 }
 
+.page-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
 .page-header-badge {
     display: inline-flex;
     align-items: center;
@@ -105,6 +114,28 @@ body {
 
 .page-header h1 span {
     color: var(--p-500);
+}
+
+.founder-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background: linear-gradient(135deg, var(--p-500), var(--p-700));
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    padding: 9px 14px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.founder-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(32, 113, 41, 0.32);
 }
 
 .page-header p {
