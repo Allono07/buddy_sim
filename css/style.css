@@ -1224,11 +1224,34 @@ body {
     body {
         height: auto;
         display: block;
-        background: #000;
-        padding-top: 44px;
+        background: #0e1a10;
+        padding-top: 70px;
     }
 
-    .page-header, .page-footer { display: none; }
+    .page-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        display: flex;
+        padding: 12px 14px;
+        background: linear-gradient(135deg, #0c2b16, #102013);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .page-header-top {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .page-header-badge, .page-header p { display: none; }
+
+    .main-container {
+        margin-top: 10px;
+    }
+
+    .page-footer { display: none; }
 
     .main-container {
         flex-direction: column;
