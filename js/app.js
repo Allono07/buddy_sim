@@ -35,6 +35,15 @@ const app = {
         this.loginSuccess();
     },
 
+    trackEvent: function (eventName, params = {}) {
+        if (typeof gtag === 'function') {
+            gtag('event', eventName, params);
+            this.log(`GA event tracked: ${eventName}`, 'info');
+        } else {
+            this.log(`GA tracking unavailable for: ${eventName}`, 'warn');
+        }
+    },
+
     loginSuccess: function (isAutoLogin = false) {
         this.state.isLoggedIn = true;
         localStorage.setItem('isLoggedIn', 'true');
@@ -47,6 +56,8 @@ const app = {
         }, 800);
 
         this.log(isAutoLogin ? 'Auto-login from saved session.' : 'User logged in.', 'success');
+
+        this.trackEvent('home_page_viewed', { method: 'simulation' });
 
         setTimeout(() => { this.initMap(); }, 400);
     },
