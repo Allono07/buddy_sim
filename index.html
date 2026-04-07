@@ -1,296 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DLHQCT2QXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-DLHQCT2QXX');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DLHQCT2QXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DLHQCT2QXX');
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trash Buddy.in – Live Simulation</title>
-    <meta name="description" content="Interactive simulation of the Trash Buddy app – watch how real-time waste truck tracking works for residents.">
+    <meta name="description"
+        content="Interactive simulation of the Trash Buddy app – watch how real-time waste truck tracking works for residents.">
+
     <link rel="icon" type="image/png" href="assets/images/rider_app.png">
     <link rel="stylesheet" href="css/style.css">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- Font Awesome -->
+    <link rel="stylesheet" href="css/landing.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
 
-    <!-- PAGE HEADER -->
-    <header class="page-header">
-        <div class="page-header-top">
-            <div class="page-header-badge">
-                <i class="fa-solid fa-circle-dot" style="font-size:8px;"></i>
-                Interactive Demo
+<body class="landing-page">
+    <div class="landing-shell">
+        <header class="landing-nav">
+            <a class="landing-brand" href="#home" aria-label="Trash Buddy home">
+                <span class="landing-brand-mark">
+                    <img src="assets/images/trash_buddy.png" alt="Trash Buddy logo">
+                </span>
+                <span class="landing-brand-copy">
+                    <strong>Trash Buddy</strong>
+                    <small>A live BBMP waste truck tracker/alert application</small>
+                </span>
+            </a>
+
+            <button class="landing-nav-toggle" id="landing-nav-toggle" type="button" aria-label="Open navigation menu"
+                aria-controls="landing-nav-panel" aria-expanded="false">
+                <i class="fa-solid fa-bars" id="landing-nav-toggle-icon"></i>
+            </button>
+
+            <div class="landing-nav-panel" id="landing-nav-panel">
+                <nav class="landing-menu" aria-label="Primary">
+                    <a href="#deck">Home</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+
+                <div class="landing-nav-actions">
+                    <button class="landing-theme-toggle" id="landing-theme-toggle" type="button"
+                        aria-label="Toggle light or dark theme">
+                        <span class="landing-theme-toggle-copy">Toggle theme</span>
+                        <i class="fa-solid fa-moon" id="landing-theme-icon"></i>
+                    </button>
+                    <a class="founder-button" href="https://allenthomson.com" target="_blank" rel="noopener noreferrer"
+                        onclick="if (window.app && app.trackEvent) app.trackEvent('founder_button_clicked', { label: 'meet_the_founding_engineer' })">
+                        <i class="fa-solid fa-user" style="margin-right:8px;"></i>
+                        Meet the founding engineer
+                    </a>
+                    <a class="landing-button landing-button-primary" href="simulationdashboard/">
+                        <i class="fa-solid fa-diagram-project"></i>
+                        Open Simulation Dashboard
+                    </a>
+                </div>
             </div>
-            <a class="founder-button" href="https://allenthomson.com" target="_blank" rel="noopener noreferrer" onclick="app.trackEvent('founder_button_clicked', { label: 'meet_the_founding_engineer' })">Meet the founding engineer</a>
-        </div>
-        <p>Experience real-time waste truck tracking. Use the control panel to simulate live events.</p>
-    </header>
+        </header>
 
-    <div class="main-container">
-        <!-- Mobile Hint -->
-        <!-- <div class="mobile-hint">
-            <i class="fa-solid fa-arrow-down"></i> Scroll down to control the simulation
-        </div> -->
+        <section class="landing-stage" id="home">
+            <div class="landing-stage-grid">
+                <div class="landing-carousel-panel" id="deck">
+                    <div class="landing-panel-intro">
 
-        <!-- LEFT SIDE: THE APP SIMULATOR -->
-        <div class="phone-wrapper">
-            <span class="phone-label">Resident App</span>
-            <div class="phone-bezel">
-                <div class="phone-screen">
-                    
-                    <!-- SCREEN 1: LOGIN -->
-                    <div id="screen-login" class="app-screen active">
-                        <div class="login-content">
-                            <div class="logo-area">
-                                <img src="assets/images/trash_buddy.png" alt="Trash Buddy" class="app-logo">
-                                <h1>Trash Buddy</h1>
-                                <p>Smart Waste Management</p>
+                        <h1>What are we trying to solve</h1>
+                        <!-- <p>The first screen is now built around your PPT carousel so you can explain Trash Buddy before
+                            moving into the live simulation.</p> -->
+                    </div>
+
+                    <div class="landing-carousel" data-carousel>
+                        <div class="landing-carousel-header">
+                            <!-- <div>
+                                <span class="landing-carousel-kicker">What are we trying to solve</span>
+
+                            </div> -->
+                            <div class="landing-carousel-count">
+                                <span id="landing-slide-current">01</span>
+                                <span>/</span>
+                                <span id="landing-slide-total">04</span>
                             </div>
-                            <div class="form-area">
-                                <button class="btn-primary" id="btn-login" onclick="app.login()">
-                                    Get Started
+                        </div>
+
+                        <div class="landing-carousel-viewport">
+                            <div class="landing-carousel-track" id="landing-carousel-track">
+                                <div class="landing-slide">
+                                    <img class="landing-slide-image" src="assets/images/1.png" alt="Product slide 1">
+                                </div>
+
+                                <div class="landing-slide">
+                                    <img class="landing-slide-image" src="assets/images/2.png" alt="Product slide 2">
+                                </div>
+
+                                <div class="landing-slide">
+                                    <img class="landing-slide-image" src="assets/images/3.png" alt="Product slide 3">
+                                </div>
+
+                                <div class="landing-slide">
+                                    <img class="landing-slide-image" src="assets/images/4.png" alt="Product slide 4">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="landing-carousel-footer">
+                            <div class="landing-carousel-dots" id="landing-carousel-dots"
+                                aria-label="Carousel pagination"></div>
+                            <div class="landing-carousel-buttons">
+                                <button class="landing-carousel-button" id="landing-carousel-prev" type="button"
+                                    aria-label="Previous slide">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                </button>
+                                <button class="landing-carousel-button" id="landing-carousel-next" type="button"
+                                    aria-label="Next slide">
+                                    <i class="fa-solid fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-
-                    <!-- SCREEN 2: HOME / DASHBOARD -->
-                    <div id="screen-home" class="app-screen">
-                        <!-- Disclaimer Popup -->
-                        <div id="disclaimer-popup" class="disclaimer-popup">
-                            <div class="disclaimer-content">
-                                <h4>Simulation Mode</h4>
-                                <p>This is a demo dashboard. No real user data is tracked or stored.</p>
-                                <button class="btn-primary" id="btn-disclaimer" onclick="app.closeDisclaimer()">Got it!</button>
-                            </div>
-                        </div>
-
-                        <!-- Sim FABs — shown top-left on mobile -->
-                        <div class="sim-fab-container">
-                            <button id="fab-online" class="sim-fab" onclick="sim.toggleDriver()" title="Toggle Driver Online">
-                                <i class="fa-solid fa-power-off"></i>
-                            </button>
-                            <button id="fab-start" class="sim-fab" onclick="sim.startRoute()" title="Start Route">
-                                <i class="fa-solid fa-play"></i>
-                            </button>
-                        </div>
-
-                        <!-- Sticky Header -->
-                        <div class="app-header">
-                            <div class="header-top">
-                                <div class="user-info">
-                                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
-                                    <div class="text">
-                                        <small>Welcome back,</small>
-                                        <strong>Resident</strong>
-                                    </div>
-                                </div>
-                                <div class="header-actions">
-                                    <button class="btn-icon" id="btn-theme" onclick="app.toggleTheme()" title="Toggle Theme"><i class="fa-solid fa-moon" id="theme-icon"></i></button>
-                                    <button class="btn-icon" id="btn-logout" onclick="app.logout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="scroll-content">
-                            <!-- Mascot Hero -->
-                            <div class="hero-section">
-                                <div class="mascot-container">
-                                    <img src="assets/images/trash_buddy.png" alt="Mascot">
-                                </div>
-                            </div>
-
-                            <div class="dashboard-content">
-                                <h3>Your Location</h3>
-                                <div style="position: relative;">
-                                    <div id="user-map" class="map-container"></div>
-                                    <button class="btn-icon map-center-btn" id="btn-center-map" onclick="app.centerMap()" title="Center on Me">
-                                        <i class="fa-solid fa-crosshairs"></i>
-                                    </button>
-                                </div>
-                                <div class="location-status" id="location-status">
-                                    <i class="fa-solid fa-location-dot"></i> Location Registered
-                                </div>
-
-                                <h3>Quick Actions</h3>
-                                <div class="action-cards">
-                                    <div class="card" id="card-location" onclick="app.openLocationScreen()">
-                                        <div class="icon-box blue"><i class="fa-solid fa-map-location-dot"></i></div>
-                                        <div class="card-text">
-                                            <strong>Update Location</strong>
-                                            <small>Set your home</small>
-                                        </div>
-                                    </div>
-                                    <div class="card" id="card-track" onclick="app.openTrackingScreen()">
-                                        <div class="icon-box green"><img src="assets/images/rider_app.png" alt="Truck" style="width: 22px; height: 22px;"></div>
-                                        <div class="card-text">
-                                            <strong>Track Vehicle</strong>
-                                            <small>Live status</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SCREEN 3: UPDATE LOCATION -->
-                    <div id="screen-location" class="app-screen">
-                        <div class="screen-header">
-                            <button class="btn-icon back-btn" id="btn-back-location" onclick="app.goBack()"><i class="fa-solid fa-arrow-left"></i></button>
-                            <h2>Update Location</h2>
-                        </div>
-                        <div class="screen-content">
-                            <div id="location-map" class="full-map"></div>
-                            <div class="bottom-sheet">
-                                <div class="input-group">
-                                    <i class="fa-solid fa-location-dot" style="color: var(--primary-green);"></i>
-                                    <input id="location-address" type="text" value="123, Green Street, Bangalore" placeholder="Address (optional)">
-                                </div>
-                                <div class="coord-row">
-                                    <div class="input-group">
-                                        <label>Latitude</label>
-                                        <input id="location-lat" type="number" step="0.00001" value="12.9716">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Longitude</label>
-                                        <input id="location-lng" type="number" step="0.00001" value="77.5946">
-                                    </div>
-                                </div>
-                                <button class="btn-primary" id="btn-confirm-location" onclick="app.saveLocation()">Confirm Location</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SCREEN 4: TRACKING -->
-                    <div id="screen-tracking" class="app-screen">
-                        <div class="screen-header">
-                            <button class="btn-icon back-btn" id="btn-back-tracking" onclick="app.goBack()"><i class="fa-solid fa-arrow-left"></i></button>
-                            <h2>Live Tracking</h2>
-                        </div>
-                        <div class="screen-content">
-                            <div id="tracking-map" class="full-map"></div>
-                            <div class="driver-info-card">
-                                <div class="driver-details">
-                                    <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
-                                    <div>
-                                        <strong>Rider: Allen Thomson</strong>
-                                        <small>Vehicle: KA-01-1234</small>
-                                    </div>
-                                </div>
-                                <div class="status-badge" id="tracking-status">Connecting...</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Notification Popup Overlay -->
-                    <div id="notification-popup" class="notification-popup">
-                        <div class="notif-icon">🔔</div>
-                        <div class="notif-content">
-                            <h4>Waste Truck Nearby!</h4>
-                            <p>The collection truck is approaching your location.</p>
-                        </div>
-                        <button class="close-notif" id="btn-close-notif" onclick="app.closeNotification()">×</button>
-                    </div>
-
-                    <!-- In-app toast -->
-                    <div id="app-toast" class="app-toast"></div>
-
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- RIGHT SIDE: SIMULATION CONTROLS -->
-        <div class="control-panel">
-            <h2>
-                <span class="panel-icon">🛠️</span>
-                Simulation Control
-            </h2>
-            <p>Simulate real-world events in the resident app using the controls below.</p>
-
-            <!-- How it works steps -->
-            <div class="steps-bar">
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <p>Bring truck <strong >online</strong></p>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <p>Start the <strong >route</strong></p>
-                </div>
-                <div class="step-item">
-                    <div class="step-number">3</div>
-                    <p>Watch the <strong >notification</strong></p>
-                </div>
+        <section class="landing-final-cta" id="contact">
+            <div>
+                <!-- <span class="landing-section-kicker">Next Step</span> -->
+                <h2>Checkout the live simulation of Trash Buddy!</h2>
+                <!-- <p>Keep the landing page focused on your slides, then use the simulation to show the real resident flow
+                    and dashboard controls.</p> -->
             </div>
-
-            <div class="control-group" id="ctrl-status">
-                <h3><span class="step-badge">STEP 1</span> Truck Status</h3>
-                <div class="status-indicator">
-                    <span id="driver-status-text">Offline</span>
-                    <div class="status-dot" id="driver-status-dot"></div>
-                </div>
-                <button class="btn-secondary" id="btn-toggle-driver" onclick="sim.toggleDriver()">
-                    <i class="fa-solid fa-power-off"></i> Bring Trucks Online
-                </button>
+            <div class="landing-final-actions">
+                <a class="landing-button landing-button-primary" href="simulationdashboard/">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    Open Simulation Dashboard
+                </a>
+                <a class="landing-button landing-button-secondary" href="https://allenthomson.com" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fa-solid fa-user"></i>
+                    Meet the founding engineer
+                </a>
             </div>
+        </section>
 
-            <div class="control-group" id="ctrl-movement">
-                <h3><span class="step-badge">STEP 2</span> Truck Movement</h3>
-                <p>Simulate the truck moving towards the user's home.</p>
-                <div class="status-inline"><strong>Distance:</strong> <span id="truck-distance">--</span></div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="truck-progress"></div>
-                </div>
-                <div class="speed-control">
-                    <label for="route-speed">Speed</label>
-                    <input type="range" id="route-speed" min="0.5" max="3" step="0.1" value="1" oninput="sim.updateSpeed(this.value)">
-                    <span id="speed-value">1.0x</span>
-                </div>
-                <div class="btn-row">
-                    <button class="btn-secondary" id="btn-start-truck" onclick="sim.startRoute()">
-                        <i class="fa-solid fa-play"></i> Start Truck
-                    </button>
-                    <button class="btn-secondary" id="btn-pause-truck" onclick="sim.togglePause()" disabled>
-                        <i class="fa-solid fa-pause"></i> Pause
-                    </button>
-                    <button class="btn-secondary" id="btn-reset-truck" onclick="sim.resetRoute()">
-                        <i class="fa-solid fa-rotate-left"></i> Reset
-                    </button>
-                </div>
+        <footer class="landing-footer">
+            <span>@allenthomson.com / contact@trashbuddy.in</span>
+            <div class="landing-footer-links">
+                <a href="https://allenthomson.com" target="_blank" rel="noopener noreferrer">Portfolio</a>
+                <a href="mailto:allono.at@gmail.com">Contact</a>
             </div>
-
-            <div class="control-group">
-                <h3><span class="step-badge">STEP 3</span> Events</h3>
-                <button class="btn-warning" id="btn-force-notif" onclick="sim.triggerNotification()">
-                    <i class="fa-solid fa-bell"></i> Force Notification
-                </button>
-            </div>
-
-            <div class="console-log" id="sim-console">
-                <div>> System ready...</div>
-            </div>
-        </div>
+        </footer>
     </div>
 
-    <!-- PAGE FOOTER -->
-    <footer class="page-footer">
-        <span class="licensing-tag">@allenthomson.com / contact@trashbuddy.in</span>
-        <div class="footer-links">
-            <a href="https://allenthomson.com" target="_blank" rel="noopener">Portfolio</a>
-            <a href="mailto:allono.at@gmail.com">Contact</a>
-        </div>
-    </footer>
-
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/landing.js"></script>
 </body>
+
 </html>
