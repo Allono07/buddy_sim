@@ -31,24 +31,24 @@
                 <i class="fa-solid fa-circle-dot" style="font-size:8px;"></i>
                 Live Simulation
             </div>
-            <h1>Trash Buddy Command Center</h1>
+            <h1>Trash Buddy Simulation Dashboard</h1>
             <p>Monitor the resident experience, vehicle route, and alert workflow from one proper dashboard.</p>
-        </div>
 
-        <div class="page-header-actions">
-            <button class="sim-header-theme" id="page-theme-toggle" type="button" onclick="app.toggleTheme()"
-                aria-label="Toggle light or dark theme">
-                <i class="fa-solid fa-moon" id="page-theme-icon"></i>
-            </button>
-            <a class="sim-header-link" href="../">
-                <i class="fa-solid fa-arrow-left"></i>
-                Home
-            </a>
-            <a class="founder-button" href="https://allenthomson.com" target="_blank" rel="noopener noreferrer"
-                onclick="if (window.app && app.trackEvent) app.trackEvent('founder_button_clicked', { label: 'meet_the_founding_engineer' })">
-                <i class="fa-solid fa-user" style="margin-right:8px;"></i>
-                Meet the founding engineer
-            </a>
+            <div class="page-header-actions">
+                <button class="sim-header-theme" id="page-theme-toggle" type="button" onclick="app.toggleTheme()"
+                    aria-label="Toggle light or dark theme">
+                    <i class="fa-solid fa-moon" id="page-theme-icon"></i>
+                </button>
+                <a class="sim-header-link" href="../">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Home
+                </a>
+                <a class="founder-button" href="https://allenthomson.com" target="_blank" rel="noopener noreferrer"
+                    onclick="if (window.app && app.trackEvent) app.trackEvent('founder_button_clicked', { label: 'meet_the_founding_engineer' })">
+                    <i class="fa-solid fa-user" style="margin-right:8px;"></i>
+                    Meet the founding engineer
+                </a>
+            </div>
         </div>
     </header>
 
@@ -300,24 +300,48 @@
                             <div class="sim-panel">
                                 <div class="sim-panel-header">
                                     <div>
-                                        <div class="sim-panel-title">Scenarios</div>
-                                        <div class="sim-panel-sub">Quick demo shortcuts</div>
+                                        <div class="sim-panel-title">Truck Controls</div>
+                                        <div class="sim-panel-sub">Status, movement, and speed</div>
                                     </div>
                                 </div>
 
-                                <div class="scenario-grid">
-                                    <button class="scenario-card" onclick="simUI.runScenario('full-demo')">
-                                        <div class="scenario-title"><i class="fa-solid fa-bolt"></i> Full demo</div>
-                                        <div class="scenario-sub">Online to route to alerts</div>
+                                <div class="control-group" id="ctrl-status">
+                                    <h3><span class="step-badge">STEP 1</span> Truck Status</h3>
+                                    <div class="status-indicator">
+                                        <span id="driver-status-text">Offline</span>
+                                        <div class="status-dot" id="driver-status-dot"></div>
+                                    </div>
+                                    <button class="btn-secondary" id="btn-toggle-driver" onclick="sim.toggleDriver()">
+                                        <i class="fa-solid fa-power-off"></i> Bring Trucks Online
                                     </button>
-                                    <button class="scenario-card" onclick="simUI.runScenario('nearby-alert')">
-                                        <div class="scenario-title"><i class="fa-solid fa-bell"></i> Nearby alert</div>
-                                        <div class="scenario-sub">Jump near the resident</div>
-                                    </button>
-                                    <button class="scenario-card" onclick="simUI.runScenario('voice-only')">
-                                        <div class="scenario-title"><i class="fa-solid fa-phone"></i> Voice call</div>
-                                        <div class="scenario-sub">Simulate the call now</div>
-                                    </button>
+                                </div>
+
+                                <div class="control-group" id="ctrl-movement">
+                                    <h3><span class="step-badge">STEP 2</span> Truck Movement</h3>
+                                    <p>Simulate the truck moving toward the resident home location.</p>
+                                    <div class="status-inline"><strong>Distance:</strong> <span
+                                            id="truck-distance">--</span></div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar" id="truck-progress"></div>
+                                    </div>
+                                    <div class="speed-control">
+                                        <label for="route-speed">Speed</label>
+                                        <input type="range" id="route-speed" min="0.5" max="3" step="0.1" value="1"
+                                            oninput="sim.updateSpeed(this.value)">
+                                        <span id="speed-value">1.0x</span>
+                                    </div>
+                                    <div class="btn-row btn-row-wrap">
+                                        <button class="btn-secondary" id="btn-start-truck" onclick="sim.startRoute()">
+                                            <i class="fa-solid fa-play"></i> Start Truck
+                                        </button>
+                                        <button class="btn-secondary" id="btn-pause-truck" onclick="sim.togglePause()"
+                                            disabled>
+                                            <i class="fa-solid fa-pause"></i> Pause
+                                        </button>
+                                        <button class="btn-secondary" id="btn-reset-truck" onclick="sim.resetRoute()">
+                                            <i class="fa-solid fa-rotate-left"></i> Reset
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -410,66 +434,24 @@
                             <div class="sim-panel">
                                 <div class="sim-panel-header">
                                     <div>
-                                        <div class="sim-panel-title">Truck Controls</div>
-                                        <div class="sim-panel-sub">Status, movement, and speed</div>
+                                        <div class="sim-panel-title">Scenarios</div>
+                                        <div class="sim-panel-sub">Quick demo shortcuts</div>
                                     </div>
                                 </div>
 
-                                <!-- <div class="control-group" id="ctrl-push">
-                                    <h3><span class="step-badge">STEP 0</span> Push Notifications</h3>
-                                    <div class="status-indicator">
-                                        <span id="push-status-text">Enabled</span>
-                                        <div class="status-dot online" id="push-status-dot"></div>
-                                    </div>
-                                    <button class="btn-secondary" id="btn-toggle-push" onclick="app.togglePushNotifications()">
-                                        <i class="fa-solid fa-bell"></i> Disable Notifications
+                                <div class="scenario-grid">
+                                    <button class="scenario-card" onclick="simUI.runScenario('full-demo')">
+                                        <div class="scenario-title"><i class="fa-solid fa-bolt"></i> Full demo</div>
+                                        <div class="scenario-sub">Online to route to alerts</div>
                                     </button>
-                                </div>
-
-                                <div class="control-group" id="ctrl-call">
-                                    <h3><span class="step-badge">STEP 0</span> Call Setup</h3>
-                                    <button class="btn-secondary" id="btn-call-support" onclick="app.showCallOptions()">
-                                        <i class="fa-solid fa-phone"></i> Choose Call Option
+                                    <button class="scenario-card" onclick="simUI.runScenario('nearby-alert')">
+                                        <div class="scenario-title"><i class="fa-solid fa-bell"></i> Nearby alert</div>
+                                        <div class="scenario-sub">Jump near the resident</div>
                                     </button>
-                                </div> -->
-
-                                <div class="control-group" id="ctrl-status">
-                                    <h3><span class="step-badge">STEP 1</span> Truck Status</h3>
-                                    <div class="status-indicator">
-                                        <span id="driver-status-text">Offline</span>
-                                        <div class="status-dot" id="driver-status-dot"></div>
-                                    </div>
-                                    <button class="btn-secondary" id="btn-toggle-driver" onclick="sim.toggleDriver()">
-                                        <i class="fa-solid fa-power-off"></i> Bring Trucks Online
+                                    <button class="scenario-card" onclick="simUI.runScenario('voice-only')">
+                                        <div class="scenario-title"><i class="fa-solid fa-phone"></i> Voice call</div>
+                                        <div class="scenario-sub">Simulate the call now</div>
                                     </button>
-                                </div>
-
-                                <div class="control-group" id="ctrl-movement">
-                                    <h3><span class="step-badge">STEP 2</span> Truck Movement</h3>
-                                    <p>Simulate the truck moving toward the resident home location.</p>
-                                    <div class="status-inline"><strong>Distance:</strong> <span
-                                            id="truck-distance">--</span></div>
-                                    <div class="progress-bar-container">
-                                        <div class="progress-bar" id="truck-progress"></div>
-                                    </div>
-                                    <div class="speed-control">
-                                        <label for="route-speed">Speed</label>
-                                        <input type="range" id="route-speed" min="0.5" max="3" step="0.1" value="1"
-                                            oninput="sim.updateSpeed(this.value)">
-                                        <span id="speed-value">1.0x</span>
-                                    </div>
-                                    <div class="btn-row btn-row-wrap">
-                                        <button class="btn-secondary" id="btn-start-truck" onclick="sim.startRoute()">
-                                            <i class="fa-solid fa-play"></i> Start Truck
-                                        </button>
-                                        <button class="btn-secondary" id="btn-pause-truck" onclick="sim.togglePause()"
-                                            disabled>
-                                            <i class="fa-solid fa-pause"></i> Pause
-                                        </button>
-                                        <button class="btn-secondary" id="btn-reset-truck" onclick="sim.resetRoute()">
-                                            <i class="fa-solid fa-rotate-left"></i> Reset
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
 
