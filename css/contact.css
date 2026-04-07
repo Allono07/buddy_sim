@@ -1,0 +1,217 @@
+body.contact-page .landing-shell {
+    padding-bottom: 28px;
+}
+
+.contact-main {
+    display: block;
+}
+
+.contact-hero {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.1fr);
+    gap: 22px;
+    align-items: stretch;
+}
+
+.contact-copy,
+.contact-form-card {
+    border-radius: 32px;
+    background: var(--landing-surface);
+    border: 1px solid var(--landing-border);
+    box-shadow: var(--shadow-md);
+}
+
+.contact-copy {
+    padding: 28px;
+    background:
+        radial-gradient(circle at top right, rgba(74, 175, 80, 0.12), transparent 11rem),
+        var(--landing-surface);
+}
+
+.contact-kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(74, 175, 80, 0.1);
+    color: var(--dark-green);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+body.contact-page[data-theme="dark"] .contact-kicker {
+    color: #a9dcae;
+    background: rgba(74, 175, 80, 0.12);
+}
+
+.contact-copy h1 {
+    margin-top: 14px;
+    font-size: clamp(2.4rem, 4vw, 4.3rem);
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    color: var(--text-color);
+}
+
+.contact-copy p {
+    margin-top: 14px;
+    color: var(--landing-soft);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 34rem;
+}
+
+.contact-note-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.contact-note-card {
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: var(--landing-surface-strong);
+    border: 1px solid var(--landing-border);
+}
+
+.contact-note-card strong {
+    display: block;
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.contact-note-card span {
+    display: block;
+    margin-top: 8px;
+    color: var(--landing-soft);
+    line-height: 1.65;
+}
+
+.contact-form-card {
+    padding: 24px;
+}
+
+.contact-form {
+    display: grid;
+    gap: 18px;
+}
+
+.contact-field {
+    display: grid;
+    gap: 8px;
+}
+
+.contact-field label {
+    color: var(--text-color);
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+.contact-field input,
+.contact-field textarea {
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid var(--landing-border);
+    background: var(--landing-surface-strong);
+    color: var(--text-color);
+    padding: 14px 16px;
+    font: inherit;
+    resize: vertical;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+    color: var(--landing-soft);
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+    outline: none;
+    border-color: rgba(74, 175, 80, 0.55);
+    box-shadow: 0 0 0 4px rgba(74, 175, 80, 0.12);
+}
+
+.contact-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--p-500), var(--p-700));
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(32, 113, 41, 0.2);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.contact-submit:hover {
+    transform: translateY(-1px);
+}
+
+.contact-page .landing-menu a[aria-current="page"] {
+    background: linear-gradient(135deg, var(--p-500), var(--p-700));
+    color: #ffffff;
+    border-color: transparent;
+}
+
+@media (max-width: 960px) {
+    .contact-hero {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-copy,
+    .contact-form-card {
+        border-radius: 24px;
+    }
+
+    .contact-copy,
+    .contact-form-card {
+        padding: 18px;
+    }
+
+    .contact-copy h1 {
+        font-size: clamp(1.9rem, 8vw, 2.8rem);
+    }
+}
+
+@media (max-width: 540px) {
+    .contact-hero {
+        gap: 16px;
+    }
+
+    .contact-copy,
+    .contact-form-card {
+        padding: 14px;
+        border-radius: 22px;
+    }
+
+    .contact-copy h1 {
+        font-size: clamp(1.6rem, 9vw, 2.2rem);
+    }
+
+    .contact-copy p,
+    .contact-note-card span {
+        font-size: 0.93rem;
+    }
+
+    .contact-field input,
+    .contact-field textarea {
+        border-radius: 16px;
+        padding: 13px 14px;
+    }
+
+    .contact-submit {
+        width: 100%;
+    }
+}

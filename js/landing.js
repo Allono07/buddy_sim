@@ -20,14 +20,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeIndex = 0;
     let autoplayId = null;
 
-    // const trackVisit = () => {
-    //     if (typeof gtag !== 'function') return;
-    //     gtag('event', 'home_page_viewed', {
-    //         page_name: 'home',
-    //         page_path: window.location.pathname,
-    //         entry_point: 'page_load'
-    //     });
-    // };
+    const trackVisit = () => {
+        if (typeof gtag !== 'function') return;
+
+        const pageName = body.dataset.pageName || 'home';
+        const eventName = pageName === 'contact' ? 'contact_page_viewed' : 'home_page_viewed';
+
+        gtag('event', eventName, {
+            page_name: pageName,
+            page_path: window.location.pathname,
+            entry_point: 'page_load'
+        });
+    };
 
     const applyTheme = (theme) => {
         if (theme === 'dark') {
@@ -51,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme('dark');
     }
 
-    // trackVisit();
+    trackVisit();
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
