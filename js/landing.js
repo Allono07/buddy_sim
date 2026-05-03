@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.getElementById('landing-nav-toggle');
     const navToggleIcon = document.getElementById('landing-nav-toggle-icon');
     const navPanel = document.getElementById('landing-nav-panel');
+    const navDropdown = document.querySelector('.landing-nav-dropdown');
     const mobileNavLinks = Array.from(document.querySelectorAll('#landing-nav-panel a'));
     const mobileNavQuery = window.matchMedia('(max-width: 960px)');
     const track = document.getElementById('landing-carousel-track');
@@ -69,6 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
         navToggleIcon.classList.toggle('fa-xmark', isOpen);
     };
 
+    const closeNavDropdown = () => {
+        if (navDropdown) {
+            navDropdown.removeAttribute('open');
+        }
+    };
+
     const setNavOpen = (isOpen) => {
         if (!navRoot || !navToggle || !navPanel) return;
 
@@ -84,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
         navToggle.setAttribute('aria-expanded', String(isOpen));
         navPanel.hidden = !isOpen;
         syncNavIcon(isOpen);
+        if (!isOpen) {
+            closeNavDropdown();
+        }
     };
 
     const syncNavLayout = () => {
@@ -101,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mobileNavLinks.forEach((link) => {
         link.addEventListener('click', () => {
+            closeNavDropdown();
             if (mobileNavQuery.matches) {
                 setNavOpen(false);
             }
@@ -108,6 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('click', (event) => {
+        if (navDropdown && navDropdown.hasAttribute('open') && !navDropdown.contains(event.target)) {
+            closeNavDropdown();
+        }
         if (!mobileNavQuery.matches || !navRoot || !navRoot.classList.contains('is-open')) return;
         if (!navRoot.contains(event.target)) {
             setNavOpen(false);
@@ -115,8 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && mobileNavQuery.matches) {
-            setNavOpen(false);
+        if (event.key === 'Escape') {
+            closeNavDropdown();
+            if (mobileNavQuery.matches) {
+                setNavOpen(false);
+            }
         }
     });
 

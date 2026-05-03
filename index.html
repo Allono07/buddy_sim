@@ -42,17 +42,7 @@
             </button>
 
             <div class="landing-nav-panel" id="landing-nav-panel">
-                <nav class="landing-menu" aria-label="Primary">
-                    <a href="#deck">Home</a>
-                    <a href="contact/">Contact</a>
-                </nav>
-
                 <div class="landing-nav-actions">
-                    <button class="landing-theme-toggle" id="landing-theme-toggle" type="button"
-                        aria-label="Toggle light or dark theme">
-                        <span class="landing-theme-toggle-copy">Toggle theme</span>
-                        <i class="fa-solid fa-moon" id="landing-theme-icon"></i>
-                    </button>
                     <a class="founder-button" href="https://allenthomson.com" target="_blank" rel="noopener noreferrer"
                         onclick="if (window.app && app.trackEvent) app.trackEvent('founder_button_clicked', { label: 'meet_the_founding_engineer' })">
                         <i class="fa-solid fa-user" style="margin-right:8px;"></i>
@@ -62,6 +52,24 @@
                         <i class="fa-solid fa-diagram-project"></i>
                         Open Simulation Dashboard
                     </a>
+                    <button class="landing-theme-toggle" id="landing-theme-toggle" type="button"
+                        aria-label="Toggle light or dark theme">
+                        <span class="landing-theme-toggle-copy">Toggle theme</span>
+                        <i class="fa-solid fa-moon" id="landing-theme-icon"></i>
+                    </button>
+                    <nav class="landing-menu" aria-label="Primary">
+                        <details class="landing-nav-dropdown">
+                            <summary>
+                                <span>More</span>
+                                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                            </summary>
+                            <div class="landing-nav-dropdown-panel">
+                                <a href="yourstory/">Share your problem with us!</a>
+                                <a href="contact/">Contact</a>
+                                <a href="./">Home</a>
+                            </div>
+                        </details>
+                    </nav>
                 </div>
             </div>
         </header>
@@ -140,17 +148,21 @@
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     Open Simulation Dashboard
                 </a>
-                <a class="landing-button landing-button-secondary" href="https://allenthomson.com" target="_blank"
+                <!-- <a class="landing-button landing-button-secondary" href="https://allenthomson.com" target="_blank"
                     rel="noopener noreferrer">
                     <i class="fa-solid fa-user"></i>
                     Meet the founding engineer
-                </a>
+                </a> -->
             </div>
         </section>
 
         <footer class="landing-footer">
             <span>@allenthomson.com / contact@trashbuddy.in</span>
             <div class="landing-footer-links">
+                <a href="https://www.instagram.com/trashbuddy.in/" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-instagram"></i>
+                    Follow us on Instagram
+                </a>
                 <a href="https://allenthomson.com" target="_blank" rel="noopener noreferrer">Portfolio</a>
                 <a href="contact/">Contact</a>
             </div>

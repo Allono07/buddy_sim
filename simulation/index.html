@@ -1,15 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=../simulationdashboard/">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to Simulation Dashboard</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DLHQCT2QXX"></script>
     <script>
-        window.location.replace('../simulationdashboard/');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-DLHQCT2QXX');
     </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Buddy – Simulation Dashboard</title>
+    <meta name="description" content="Interactive simulation of the Trash Buddy app – watch how real-time waste truck tracking works for residents.">
+
+    <link rel="icon" type="image/png" href="../assets/images/rider_app.png">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <p>Redirecting to <a href="../simulationdashboard/">/simulationdashboard</a>...</p>
+    <!-- PAGE HEADER -->
+    <header class="page-header">
+        <div class="page-header-top">
+            <div class="page-header-badge">
+                <i class="fa-solid fa-circle-dot" style="font-size:8px;"></i>
+                Live Simulation
+            </div>
+            <a class="founder-button" href="https://allenthomson.com" target="_blank" rel="noopener noreferrer" onclick="if (window.app && app.trackEvent) app.trackEvent('founder_button_clicked', { label: 'meet_the_founding_engineer' })">
+                <i class="fa-solid fa-user" style="margin-right:8px;"></i>
+                Meet the founding engineer
+            </a>
+        </div>
+        <p>Bring BBMP waste trucks online, run a route, and simulate alerts (notification + voice call) for Bangalore residents.</p>
+    </header>
+
+    <div class="sim-shell">
+        <aside class="sim-sidebar" aria-label="Simulation navigation">
+            <div class="sim-sidebar-header">
+                <div class="sim-brand">
+                    <img src="../assets/images/trash_buddy.png" alt="Trash Buddy" />
+                    <div>
+                        <div class="sim-brand-title">Trash Buddy</div>
+                        <div class="sim-brand-sub">BBMP vehicle simulation</div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sim-nav">
+                <button class="sim-nav-item active" data-sim-tab="overview" onclick="simUI.setTab('overview')">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    Overview
+                </button>
+                <button class="sim-nav-item" data-sim-tab="controls" onclick="simUI.setTab('controls')">
+                    <i class="fa-solid fa-sliders"></i>
+                    Controls
+                </button>
+                <button class="sim-nav-item" data-sim-tab="events" onclick="simUI.setTab('events')">
+                    <i class="fa-solid fa-wave-square"></i>
+                    Events
+                </button>
+                <button class="sim-nav-item" data-sim-tab="settings" onclick="simUI.setTab('settings')">
+                    <i class="fa-solid fa-gear"></i>
+                    Settings
+                </button>
+            </nav>
+
+            <div class="sim-sidebar-footer">
+                <div class="sim-mini-status">
+                    <span class="pill" id="sidebar-pill-status">Offline</span>
+                    <span class="pill pill-muted">Bengaluru</span>
+                </div>
+                <a class="sim-sidebar-link" href="../">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back to home
+                </a>
+            </div>
+        </aside>
+
+        <main class="sim-main">
+            <div class="sim-main-grid">
+                <!-- LEFT: THE APP SIMULATOR -->
+                <section class="sim-phone">
+                    <div class="phone-wrapper">
+            <span class="phone-label">Resident App</span>
+            <div class="phone-bezel">
+                <div class="phone-screen">
+                    <!-- SCREEN 1: LOGIN -->
+                    <div id="screen-login" class="app-screen active">
+                        <div class="login-content">
+                            <div class="logo-area">
+                                <img src="../assets/images/trash_buddy.png" alt="Trash Buddy" class="app-logo">
+                                <h1>Trash Buddy</h1>
+                                <p>Smart Waste Management</p>
+                            </div>
+                            <div class="form-area">
+                                <button class="btn-primary" id="btn-login" onclick="app.login()">
+                                    Get Started
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SCREEN 2: HOME / DASHBOARD -->
+                    <div id="screen-home" class="app-screen">
+                        <!-- Disclaimer Popup -->
+                        <div id="disclaimer-popup" class="disclaimer-popup">
+                            <div class="disclaimer-content">
+                                <h4>Simulation Mode</h4>
+                                <p>This is a demo dashboard. No real user data is tracked or stored.</p>
+                                <button class="btn-primary" id="btn-disclaimer" onclick="app.closeDisclaimer()">Got it!</button>
+                            </div>
+                        </div>
+
+                        <!-- Sim FABs — shown top-left on mobile -->
+                        <div class="sim-fab-container">
+                            <button id="fab-online" class="sim-fab" onclick="sim.toggleDriver()" title="Toggle Driver Online">
+                                <i class="fa-solid fa-power-off"></i>
+                            </button>
+                            <button id="fab-start" class="sim-fab" onclick="sim.startRoute()" title="Start Route">
+                                <i class="fa-solid fa-play"></i>
+                            </button>
+                        </div>
+
+                        <!-- Sticky Header -->
+                        <div class="app-header">
+                            <div class="header-top">
+                                <div class="user-info">
+                                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                    <div class="text">
+                                        <small>Welcome back,</small>
+                                        <strong>Resident</strong>
+                                    </div>
+                                </div>
+                                <div class="header-actions">
+                                    <button class="btn-icon" id="btn-theme" onclick="app.toggleTheme()" title="Toggle Theme"><i class="fa-solid fa-moon" id="theme-icon"></i></button>
+                                    <button class="btn-icon" id="btn-logout" onclick="app.logout()" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="scroll-content">
+                            <!-- Mascot Hero -->
+                            <div class="hero-section">
+                                <div class="mascot-container">
+                                    <img src="../assets/images/trash_buddy.png" alt="Mascot">
+                                </div>
+                            </div>
+
+                            <div class="dashboard-content">
+                                <h3>Your Location</h3>
+                                <div style="position: relative;">
+                                    <div id="user-map" class="map-container"></div>
+                                    <button class="btn-icon map-center-btn" id="btn-center-map" onclick="app.centerMap()" title="Center on Me">
+                                        <i class="fa-solid fa-crosshairs"></i>
+                                    </button>
+                                </div>
+                                <div class="location-status" id="location-status">
+                                    <i class="fa-solid fa-location-dot"></i> Location Registered
+                                </div>
+
+                                <h3>Quick Actions</h3>
+                                <div class="action-cards">
+                                    <div class="card" id="card-location" onclick="app.openLocationScreen()">
+                                        <div class="icon-box blue"><i class="fa-solid fa-map-location-dot"></i></div>
+                                        <div class="card-text">
+                                            <strong>Update Location</strong>
+                                            <small>Set your home</small>
+                                        </div>
+                                    </div>
+                                    <div class="card" id="card-track" onclick="app.openTrackingScreen()">
+                                        <div class="icon-box green"><img src="../assets/images/rider_app.png" alt="Truck" style="width: 22px; height: 22px;"></div>
+                                        <div class="card-text">
+                                            <strong>Track Vehicle</strong>
+                                            <small>Live status</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SCREEN 3: UPDATE LOCATION -->
+                    <div id="screen-location" class="app-screen">
+                        <div class="screen-header">
+                            <button class="btn-icon back-btn" id="btn-back-location" onclick="app.goBack()"><i class="fa-solid fa-arrow-left"></i></button>
+                            <h2>Update Location</h2>
+                        </div>
+                        <div class="screen-content">
+                            <div id="location-map" class="full-map"></div>
+                            <div class="bottom-sheet">
+                                <div class="input-group">
+                                    <i class="fa-solid fa-location-dot" style="color: var(--primary-green);"></i>
+                                    <input id="location-address" type="text" value="123, Green Street, Bangalore" placeholder="Address (optional)">
+                                </div>
+                                <div class="coord-row">
+                                    <div class="input-group">
+                                        <label>Latitude</label>
+                                        <input id="location-lat" type="number" step="0.00001" value="12.9716">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Longitude</label>
+                                        <input id="location-lng" type="number" step="0.00001" value="77.5946">
+                                    </div>
+                                </div>
+                                <button class="btn-primary" id="btn-confirm-location" onclick="app.saveLocation()">Confirm Location</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SCREEN 4: TRACKING -->
+                    <div id="screen-tracking" class="app-screen">
+                        <div class="screen-header">
+                            <button class="btn-icon back-btn" id="btn-back-tracking" onclick="app.goBack()"><i class="fa-solid fa-arrow-left"></i></button>
+                            <h2>Live Tracking</h2>
+                        </div>
+                        <div class="screen-content">
+                            <div id="tracking-map" class="full-map"></div>
+                            <div class="driver-info-card">
+                                <div class="driver-details">
+                                    <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+                                    <div>
+                                        <strong>Rider: Allen Thomson</strong>
+                                        <small>Vehicle: KA-01-1234</small>
+                                    </div>
+                                </div>
+                                <div class="status-badge" id="tracking-status">Connecting...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification Popup Overlay -->
+                    <div id="notification-popup" class="notification-popup">
+                        <div class="notif-icon">🔔</div>
+                        <div class="notif-content">
+                            <h4>Waste Truck Nearby!</h4>
+                            <p>The collection truck is approaching your location.</p>
+                        </div>
+                        <button class="close-notif" id="btn-close-notif" onclick="app.closeNotification()">×</button>
+                    </div>
+
+                    <!-- Voice Call Popup Overlay -->
+                    <div id="voice-call-popup" class="notification-popup voice-call-popup">
+                        <div class="notif-icon"><i class="fa-solid fa-phone"></i></div>
+                        <div class="notif-content">
+                            <h4>Voice Call (Simulated)</h4>
+                            <p id="voice-call-message">Your waste truck is getting close.</p>
+                        </div>
+                        <button class="close-notif" id="btn-close-voice-call" onclick="app.closeVoiceCall()">×</button>
+                    </div>
+
+                    <!-- In-app toast -->
+                    <div id="app-toast" class="app-toast"></div>
+                </div>
+            </div>
+        </div>
+                </section>
+
+                <!-- RIGHT: DASHBOARD -->
+                <section class="sim-dashboard">
+                    <!-- OVERVIEW TAB -->
+                    <div class="sim-tab active" data-sim-tab-panel="overview">
+                        <div class="sim-row">
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Ops Map</div>
+                                        <div class="sim-panel-sub">Resident + truck view (live)</div>
+                                    </div>
+                                    <button class="sim-chip" onclick="simUI.centerOpsMap()"><i class="fa-solid fa-crosshairs"></i> Center</button>
+                                </div>
+                                <div id="ops-map" class="ops-map" aria-label="Operations map"></div>
+                                <div class="ops-map-legend">
+                                    <span class="legend-item"><span class="legend-dot legend-home"></span> Resident</span>
+                                    <span class="legend-item"><span class="legend-dot legend-truck"></span> BBMP truck</span>
+                                </div>
+                            </div>
+
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Live Metrics</div>
+                                        <div class="sim-panel-sub">Status + ETA + alerts</div>
+                                    </div>
+                                </div>
+
+                                <div class="metrics-grid" aria-label="Simulation live metrics">
+                                    <div class="metric-card">
+                                        <div class="metric-label">Truck Status</div>
+                                        <div class="metric-value" id="metric-truck-status">Offline</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-label">ETA to You</div>
+                                        <div class="metric-value" id="metric-eta">--</div>
+                                        <div class="metric-sub">min:sec</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-label">Route Progress</div>
+                                        <div class="metric-value" id="metric-progress">0%</div>
+                                        <div class="metric-sub">on current route</div>
+                                    </div>
+                                    <div class="metric-card">
+                                        <div class="metric-label">Alerts Sent</div>
+                                        <div class="metric-value"><span id="metric-notifications">0</span> notifications</div>
+                                        <div class="metric-sub"><span id="metric-voice-calls">0</span> voice calls</div>
+                                    </div>
+                                </div>
+
+                                <div class="sim-panel-actions">
+                                    <button class="btn-secondary" onclick="sim.toggleDriver()"><i class="fa-solid fa-power-off"></i> Toggle truck</button>
+                                    <button class="btn-secondary" onclick="sim.startRoute()"><i class="fa-solid fa-play"></i> Start route</button>
+                                    <button class="btn-secondary" onclick="sim.resetRoute()"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sim-row">
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Scenarios</div>
+                                        <div class="sim-panel-sub">One-click demos</div>
+                                    </div>
+                                </div>
+                                <div class="scenario-grid">
+                                    <button class="scenario-card" onclick="simUI.runScenario('full-demo')">
+                                        <div class="scenario-title"><i class="fa-solid fa-bolt"></i> Full demo</div>
+                                        <div class="scenario-sub">Online → route → alerts</div>
+                                    </button>
+                                    <button class="scenario-card" onclick="simUI.runScenario('nearby-alert')">
+                                        <div class="scenario-title"><i class="fa-solid fa-bell"></i> Nearby alert</div>
+                                        <div class="scenario-sub">Jump near resident</div>
+                                    </button>
+                                    <button class="scenario-card" onclick="simUI.runScenario('voice-only')">
+                                        <div class="scenario-title"><i class="fa-solid fa-phone"></i> Voice call</div>
+                                        <div class="scenario-sub">Simulate call now</div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Events</div>
+                                        <div class="sim-panel-sub">What’s happening</div>
+                                    </div>
+                                    <div class="sim-panel-header-actions">
+                                        <button class="sim-chip" onclick="sim.exportEvents()"><i class="fa-solid fa-download"></i> Export</button>
+                                        <button class="sim-chip" onclick="sim.clearEvents()"><i class="fa-solid fa-eraser"></i> Clear</button>
+                                    </div>
+                                </div>
+                                <div class="console-log console-log-lg" id="sim-console">
+                                    <div>> System ready...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CONTROLS TAB -->
+                    <div class="sim-tab" data-sim-tab-panel="controls">
+                        <div class="sim-row">
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Truck Controls</div>
+                                        <div class="sim-panel-sub">Online + movement</div>
+                                    </div>
+                                </div>
+
+                                <div class="control-group" id="ctrl-push">
+                                    <h3><span class="step-badge">STEP 0</span> Push Notifications</h3>
+                                    <div class="status-indicator">
+                                        <span id="push-status-text">Enabled</span>
+                                        <div class="status-dot online" id="push-status-dot"></div>
+                                    </div>
+                                    <button class="btn-secondary" id="btn-toggle-push" onclick="app.togglePushNotifications()">
+                                        <i class="fa-solid fa-bell"></i> Disable Notifications
+                                    </button>
+                                </div>
+
+                                <div class="control-group" id="ctrl-call">
+                                    <h3><span class="step-badge">STEP 0</span> Call Setup</h3>
+                                    <p class="call-note">Call selection can be enabled later.</p>
+                                    <button class="btn-secondary" id="btn-call-support" onclick="app.showCallOptions()">
+                                        <i class="fa-solid fa-phone"></i> Choose Call Option
+                                    </button>
+                                </div>
+
+                                <div class="control-group" id="ctrl-status">
+                                    <h3><span class="step-badge">STEP 1</span> Truck Status</h3>
+                                    <div class="status-indicator">
+                                        <span id="driver-status-text">Offline</span>
+                                        <div class="status-dot" id="driver-status-dot"></div>
+                                    </div>
+                                    <button class="btn-secondary" id="btn-toggle-driver" onclick="sim.toggleDriver()">
+                                        <i class="fa-solid fa-power-off"></i> Bring Trucks Online
+                                    </button>
+                                </div>
+
+                                <div class="control-group" id="ctrl-movement">
+                                    <h3><span class="step-badge">STEP 2</span> Truck Movement</h3>
+                                    <p>Simulate the truck moving towards the user's home.</p>
+                                    <div class="status-inline"><strong>Distance:</strong> <span id="truck-distance">--</span></div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar" id="truck-progress"></div>
+                                    </div>
+                                    <div class="speed-control">
+                                        <label for="route-speed">Speed</label>
+                                        <input type="range" id="route-speed" min="0.5" max="3" step="0.1" value="1" oninput="sim.updateSpeed(this.value)">
+                                        <span id="speed-value">1.0x</span>
+                                    </div>
+                                    <div class="btn-row btn-row-wrap">
+                                        <button class="btn-secondary" id="btn-start-truck" onclick="sim.startRoute()">
+                                            <i class="fa-solid fa-play"></i> Start Truck
+                                        </button>
+                                        <button class="btn-secondary" id="btn-pause-truck" onclick="sim.togglePause()" disabled>
+                                            <i class="fa-solid fa-pause"></i> Pause
+                                        </button>
+                                        <button class="btn-secondary" id="btn-reset-truck" onclick="sim.resetRoute()">
+                                            <i class="fa-solid fa-rotate-left"></i> Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Alerts</div>
+                                        <div class="sim-panel-sub">Notification + voice call</div>
+                                    </div>
+                                </div>
+
+                                <div class="btn-row btn-row-wrap">
+                                    <button class="btn-warning" id="btn-force-notif" onclick="sim.triggerNotification()">
+                                        <i class="fa-solid fa-bell"></i> Force Notification
+                                    </button>
+                                    <button class="btn-secondary" id="btn-voice-call" onclick="sim.triggerVoiceCall()">
+                                        <i class="fa-solid fa-phone"></i> Voice Call
+                                    </button>
+                                </div>
+
+                                <label class="checkbox-row">
+                                    <input type="checkbox" id="auto-voice-call" checked />
+                                    <span>Auto voice call when the notification trigger fires</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EVENTS TAB -->
+                    <div class="sim-tab" data-sim-tab-panel="events">
+                        <div class="sim-row">
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Events Log</div>
+                                        <div class="sim-panel-sub">Exportable audit trail</div>
+                                    </div>
+                                    <div class="sim-panel-header-actions">
+                                        <button class="sim-chip" onclick="sim.exportEvents()"><i class="fa-solid fa-download"></i> Export</button>
+                                        <button class="sim-chip" onclick="sim.clearEvents()"><i class="fa-solid fa-eraser"></i> Clear</button>
+                                    </div>
+                                </div>
+                                <div class="console-log console-log-xl" id="sim-console-events">
+                                    <div>> Events mirror (see Overview for live feed)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SETTINGS TAB -->
+                    <div class="sim-tab" data-sim-tab-panel="settings">
+                        <div class="sim-row">
+                            <div class="sim-panel">
+                                <div class="sim-panel-header">
+                                    <div>
+                                        <div class="sim-panel-title">Dashboard Settings</div>
+                                        <div class="sim-panel-sub">Theme + UX toggles</div>
+                                    </div>
+                                </div>
+
+                                <div class="settings-grid">
+                                    <div class="settings-item">
+                                        <div class="settings-label">Theme</div>
+                                        <div class="settings-sub">Use the moon/sun button inside the Resident App</div>
+                                    </div>
+                                    <div class="settings-item">
+                                        <div class="settings-label">Auto voice call</div>
+                                        <div class="settings-sub">Enabled from Controls tab</div>
+                                    </div>
+                                    <div class="settings-item">
+                                        <div class="settings-label">Event export</div>
+                                        <div class="settings-sub">Downloads JSON for demos/presentations</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- PAGE FOOTER -->
+    <footer class="page-footer">
+        <span class="licensing-tag">@allenthomson.com / contact@trashbuddy.in</span>
+        <div class="footer-links">
+            <a href="https://www.instagram.com/trashbuddy.in/" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-instagram"></i>
+                Follow us on Instagram
+            </a>
+            <a href="https://allenthomson.com" target="_blank" rel="noopener">Portfolio</a>
+            <a href="mailto:allono.at@gmail.com">Contact</a>
+        </div>
+    </footer>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../js/app.js"></script>
 </body>
 </html>

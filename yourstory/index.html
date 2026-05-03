@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Story | Trash Buddy</title>
+    <meta name="description"
+        content="Share your waste collection experience with Trash Buddy.">
+    <link rel="icon" type="image/png" href="../assets/images/rider_app.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.18);
+            --title-color: #ffffff;
+            --text-color: rgba(255, 255, 255, 0.9);
+            --accent-strong: #1f7c3f;
+            --accent-soft: rgba(228, 247, 232, 0.18);
+            --shadow-soft: 0 20px 48px rgba(8, 19, 11, 0.24);
+            --radius-xl: 28px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-color);
+            background: #1e2a22;
+        }
+
+        .story-shell {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .story-page-end {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 16px 24px;
+            background: #1e2a22;
+        }
+
+        .story-page-end a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.88);
+            text-decoration: none;
+            font-size: 0.94rem;
+            font-weight: 700;
+            transition: opacity 0.16s ease;
+        }
+
+        .story-page-end a:hover {
+            opacity: 0.84;
+        }
+
+        .story-home-link {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            z-index: 3;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 700;
+            transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+        }
+
+        .story-home-link:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .story-hero {
+            text-align: center;
+            display: grid;
+            gap: 14px;
+        }
+
+        .story-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            justify-self: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .story-kicker::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #72dc8b, #2f9d53);
+        }
+
+        .story-hero h1 {
+            margin: 0;
+            color: var(--title-color);
+            font-size: clamp(1.9rem, 4vw, 3.4rem);
+            line-height: 0.98;
+            letter-spacing: -0.04em;
+            text-shadow: 0 10px 28px rgba(0, 0, 0, 0.34);
+        }
+
+        .story-hero p {
+            margin: 0;
+            font-size: clamp(1.04rem, 2vw, 1.28rem);
+            line-height: 1.55;
+            color: var(--text-color);
+            text-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-stage {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .story-stage::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+                radial-gradient(circle at center, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 30%),
+                linear-gradient(180deg, rgba(4, 13, 7, 0.32), rgba(4, 13, 7, 0.5));
+            pointer-events: none;
+        }
+
+        .story-gallery {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: 1fr 0.9fr;
+            gap: 0;
+        }
+
+        .story-card {
+            position: relative;
+            overflow: hidden;
+            background-image: var(--story-image);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .story-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            background-position: inherit;
+            background-repeat: inherit;
+            background-size: inherit;
+            transform: scale(1);
+        }
+
+        .story-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(11, 33, 18, 0.04), rgba(11, 33, 18, 0.18));
+        }
+
+        .story-card:hover::before,
+        .story-card:focus-within::before {
+            transform: scale(1);
+        }
+
+        .story-card--wide {
+            grid-column: 1 / -1;
+        }
+
+        .story-card--truck {
+            --story-image: url("../assets/images/trucknotarrived.webp");
+        }
+
+        .story-card--alerts {
+            --story-image: url("../assets/images/missedalert.webp");
+        }
+
+        .story-card--dumping {
+            --story-image: url("../assets/images/illegaldumping.webp");
+            background-position: center 32%;
+            height: 100%;
+        }
+
+        .story-content {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            padding: 32px;
+        }
+
+        .story-content-inner {
+            width: min(100%, 1100px);
+            min-height: calc(100vh - 64px);
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            align-items: start;
+            gap: 24px;
+        }
+
+        .story-form-card {
+            width: min(100%, 500px);
+            padding: clamp(22px, 4vw, 32px);
+            border-radius: var(--radius-xl);
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            justify-self: center;
+            align-self: end;
+            position: relative;
+            overflow: visible;
+        }
+
+        .story-form-card::before {
+            content: none;
+        }
+
+        .story-form-card>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .field-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field-group label {
+            color: rgba(255, 255, 255, 0.94);
+            font-size: 0.96rem;
+            font-weight: 700;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+        }
+
+        .field-group input,
+        .field-group textarea {
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 18px;
+            background: transparent;
+            color: #ffffff;
+            font: inherit;
+            padding: 14px 16px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .field-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .field-group input::placeholder,
+        .field-group textarea::placeholder {
+            color: rgba(241, 249, 243, 0.76);
+        }
+
+        .field-group input:focus,
+        .field-group textarea:focus {
+            outline: none;
+            border-color: rgba(132, 231, 156, 0.55);
+            box-shadow: 0 0 0 4px rgba(132, 231, 156, 0.14);
+            transform: translateY(-1px);
+        }
+
+        .submit-button {
+            width: 100%;
+            min-height: 54px;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #3cb863 0%, #1f7c3f 100%);
+            color: #ffffff;
+            font: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 14px 28px rgba(31, 124, 63, 0.24);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 32px rgba(31, 124, 63, 0.28);
+            filter: saturate(1.04);
+        }
+
+        .submit-button:focus-visible {
+            outline: 3px solid rgba(47, 157, 83, 0.24);
+            outline-offset: 3px;
+        }
+
+        .form-status {
+            min-height: 24px;
+            margin: 2px 2px 0;
+            font-size: 0.94rem;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.92);
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+        }
+
+        .form-status[data-state="success"] {
+            color: var(--accent-strong);
+        }
+
+        @media (max-width: 1024px) {
+            .story-stage {
+                min-height: 100svh;
+            }
+
+            .story-stage::before {
+                background:
+                    radial-gradient(circle at center, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 28%),
+                    linear-gradient(180deg, rgba(4, 13, 7, 0.4), rgba(4, 13, 7, 0.62));
+            }
+
+            .story-gallery {
+                display: block;
+            }
+
+            .story-gallery.story-gallery--carousel .story-card {
+                position: absolute;
+                inset: 0;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: transform 0.7s ease, opacity 0.7s ease;
+            }
+
+            .story-gallery.story-gallery--carousel .story-card.is-active {
+                opacity: 1;
+                transform: translateX(0);
+                z-index: 2;
+            }
+
+            .story-gallery.story-gallery--carousel .story-card.is-prev {
+                opacity: 0;
+                transform: translateX(-100%);
+                z-index: 1;
+            }
+
+            .story-gallery.story-gallery--carousel .story-card.is-next {
+                opacity: 0;
+                transform: translateX(100%);
+                z-index: 1;
+            }
+
+            .story-card,
+            .story-card--wide {
+                grid-column: auto;
+            }
+
+            .story-card--truck {
+                --story-image: url("../assets/images/trucnotarrivedmobile.webp");
+                background-position: center center;
+            }
+
+            .story-card--alerts {
+                --story-image: url("../assets/images/unawaremobile.webp");
+                background-position: 100% center;
+                background-size: cover;
+                /* size: 100% auto; */
+            }
+
+            .story-card--dumping {
+                --story-image: url("../assets/images/illegalmobile.webp");
+                background-position: center center;
+            }
+
+            .story-content {
+                padding: 28px 22px;
+                align-items: center;
+            }
+
+            .story-content-inner {
+                width: min(100%, 640px);
+                min-height: calc(100svh - 48px);
+                grid-template-rows: auto auto;
+                justify-items: center;
+                justify-content: center;
+                align-content: center;
+                gap: 14px;
+            }
+
+            .story-hero {
+                max-width: 34rem;
+                justify-self: center;
+            }
+
+            .story-form-card {
+                width: min(100%, 460px);
+                border-radius: 24px;
+                align-self: center;
+            }
+        }
+
+        @media (max-width: 540px) {
+            .story-home-link {
+                top: 14px;
+                left: 14px;
+                min-height: 38px;
+                padding: 0 14px;
+                font-size: 0.88rem;
+            }
+
+            .story-content {
+                padding: 18px 14px;
+            }
+
+            .story-content-inner {
+                gap: 12px;
+                min-height: calc(100svh - 36px);
+            }
+
+            .story-hero h1 {
+                font-size: clamp(2rem, 10vw, 2.8rem);
+            }
+
+            .story-hero p {
+                font-size: 1rem;
+            }
+
+            .field-group input,
+            .field-group textarea {
+                border-radius: 16px;
+                padding: 13px 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="story-shell">
+        <section class="story-stage" aria-label="Resident problem stories and report form">
+            <a class="story-home-link" href="../">
+                <span aria-hidden="true">←</span>
+                <span>Home</span>
+            </a>
+            <div class="story-gallery" aria-hidden="true">
+                <article class="story-card story-card--truck"></article>
+                <article class="story-card story-card--alerts"></article>
+                <article class="story-card story-card--wide story-card--dumping"></article>
+            </div>
+
+            <section class="story-content">
+                <div class="story-content-inner">
+                    <header class="story-hero">
+                        <!-- <span class="story-kicker">Community Voice</span> -->
+                        <h1>Facing a similar problem?</h1>
+                        <p>Tell us what you're facing.</p>
+                    </header>
+
+                    <div class="story-form-card">
+                        <form class="story-form" id="problem-form" novalidate>
+                            <input type="hidden" name="submitted_at" id="submitted-at">
+                            <input type="hidden" name="source_page" value="/yourstory">
+                            <div class="field-group">
+                                <label for="area-location">Area / Location</label>
+                                <input id="area-location" name="area" type="text"
+                                    placeholder="Enter your locality"
+                                    autocomplete="address-level2" required>
+                            </div>
+
+                            <div class="field-group">
+                                <label for="problem-description">Problem Description</label>
+                                <textarea id="problem-description" name="description"
+                                    placeholder="Describe how you are currently experiencing the waste collection service and what issues you are facing"
+                                    required></textarea>
+                            </div>
+
+                            <div class="field-group">
+                                <label for="email">Email (Optional)</label>
+                                <input id="email" name="email" type="email" placeholder="you@trashbuddy.in"
+                                    autocomplete="email">
+                            </div>
+
+                            <button class="submit-button" type="submit">Submit Problem</button>
+                            <p class="form-status" id="form-status" aria-live="polite"></p>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="story-page-end">
+        <a href="https://www.instagram.com/trashbuddy.in/" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-instagram"></i>
+            Follow us on Instagram
+        </a>
+    </footer>
+
+    <script>
+        window.__ENV = {
+            NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: "noyxT_Bu6ph2s9LL8",
+            NEXT_PUBLIC_EMAILJS_SERVICE_ID: "service_z7ejjbn",
+            NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: "template_2kpywxj"
+        };
+    </script>
+
+    <script>
+        const EMAILJS_CONFIG = {
+            publicKey: window.__ENV?.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "noyxT_Bu6ph2s9LL8",
+            serviceId: window.__ENV?.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "service_z7ejjbn",
+            templateId: window.__ENV?.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "template_2kpywxj"
+        };
+
+        console.log("📧 EmailJS Config loaded:", {
+            publicKey: EMAILJS_CONFIG.publicKey ? "✓ Set" : "✗ Missing",
+            serviceId: EMAILJS_CONFIG.serviceId ? "✓ Set" : "✗ Missing",
+            templateId: EMAILJS_CONFIG.templateId ? "✓ Set" : "✗ Missing"
+        });
+
+        const storyGallery = document.querySelector(".story-gallery");
+        const storySlides = Array.from(document.querySelectorAll(".story-card"));
+        const problemForm = document.getElementById("problem-form");
+        const formStatus = document.getElementById("form-status");
+        const submittedAtField = document.getElementById("submitted-at");
+        const mobileCarouselQuery = window.matchMedia("(max-width: 1024px)");
+        let carouselIndex = 0;
+        let carouselTimer = null;
+
+        const hasEmailJsConfig = Object.values(EMAILJS_CONFIG).every((value) => value && !value.startsWith("YOUR_"));
+
+        const clearStatus = () => {
+            formStatus.textContent = "";
+            formStatus.removeAttribute("data-state");
+        };
+
+        const renderMobileCarousel = () => {
+            if (!mobileCarouselQuery.matches) {
+                storyGallery.classList.remove("story-gallery--carousel");
+                storySlides.forEach((slide) => {
+                    slide.classList.remove("is-active", "is-prev", "is-next");
+                });
+                return;
+            }
+
+            storyGallery.classList.add("story-gallery--carousel");
+
+            storySlides.forEach((slide, index) => {
+                slide.classList.remove("is-active", "is-prev", "is-next");
+
+                if (index === carouselIndex) {
+                    slide.classList.add("is-active");
+                } else if (index === (carouselIndex - 1 + storySlides.length) % storySlides.length) {
+                    slide.classList.add("is-prev");
+                } else {
+                    slide.classList.add("is-next");
+                }
+            });
+        };
+
+        const stopMobileCarousel = () => {
+            if (carouselTimer) {
+                window.clearInterval(carouselTimer);
+                carouselTimer = null;
+            }
+        };
+
+        const startMobileCarousel = () => {
+            stopMobileCarousel();
+            renderMobileCarousel();
+
+            if (!mobileCarouselQuery.matches) {
+                return;
+            }
+
+            carouselTimer = window.setInterval(() => {
+                carouselIndex = (carouselIndex + 1) % storySlides.length;
+                renderMobileCarousel();
+            }, 4200);
+        };
+
+        problemForm.querySelectorAll("input, textarea").forEach((field) => {
+            field.addEventListener("input", clearStatus);
+        });
+
+        problemForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            clearStatus();
+
+            if (!problemForm.checkValidity()) {
+                problemForm.reportValidity();
+                return;
+            }
+
+            if (!hasEmailJsConfig) {
+                formStatus.textContent = "Email service is not configured yet. Add your EmailJS keys to enable submissions.";
+                return;
+            }
+
+            submittedAtField.value = new Date().toLocaleString("en-IN", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            });
+
+            const submitButton = problemForm.querySelector(".submit-button");
+            submitButton.disabled = true;
+            submitButton.textContent = "Sending...";
+
+            const formData = new FormData(problemForm);
+            formData.append('service_id', EMAILJS_CONFIG.serviceId);
+            formData.append('template_id', EMAILJS_CONFIG.templateId);
+            formData.append('user_id', EMAILJS_CONFIG.publicKey);
+
+            console.log("📤 Sending email with:", {
+                service_id: EMAILJS_CONFIG.serviceId,
+                template_id: EMAILJS_CONFIG.templateId,
+                user_id: EMAILJS_CONFIG.publicKey,
+                formFields: Array.from(formData.entries())
+            });
+
+            fetch('https://api.emailjs.com/api/v1.0/email/send-form', {
+                method: 'POST',
+                body: formData
+            }).then((response) => {
+                console.log("📨 Response status:", response.status, response.statusText);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            }).then((data) => {
+                console.log("✅ Email sent successfully!", data);
+                formStatus.textContent = "Thanks for taking the time to share your experience. Your report has been sent successfully.";
+                formStatus.setAttribute("data-state", "success");
+                formStatus.style.color = "#ffffff";
+                problemForm.reset();
+            }).catch((error) => {
+                console.error("❌ Email submission failed:", error);
+                formStatus.textContent = "Could not send your report right now. Please try again in a moment.";
+            }).finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = "Submit Problem";
+            });
+        });
+
+        mobileCarouselQuery.addEventListener("change", startMobileCarousel);
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                stopMobileCarousel();
+            } else {
+                startMobileCarousel();
+            }
+        });
+
+        startMobileCarousel();
+    </script>
+</body>
+
+</html>

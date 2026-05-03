@@ -121,6 +121,12 @@ body.landing-page[data-theme="dark"] {
     font-weight: 700;
 }
 
+.landing-footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .landing-menu a {
     display: inline-flex;
     align-items: center;
@@ -131,6 +137,72 @@ body.landing-page[data-theme="dark"] {
     border: 1px solid var(--landing-border);
     background: rgba(74, 175, 80, 0.06);
     box-shadow: var(--shadow-sm);
+}
+
+.landing-nav-dropdown {
+    position: relative;
+}
+
+.landing-nav-dropdown summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid var(--landing-border);
+    background: rgba(74, 175, 80, 0.06);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-color);
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.landing-nav-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.landing-nav-dropdown summary::marker {
+    display: none;
+}
+
+.landing-nav-dropdown summary i {
+    font-size: 0.82rem;
+    transition: transform 0.16s ease;
+}
+
+.landing-nav-dropdown[open] summary i {
+    transform: rotate(180deg);
+}
+
+.landing-nav-dropdown summary:hover {
+    transform: translateY(-1px);
+}
+
+.landing-nav-dropdown-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    min-width: 280px;
+    max-width: min(90vw, 320px);
+    display: grid;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 20px;
+    background: var(--landing-surface-strong);
+    border: 1px solid var(--landing-border);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(14px);
+}
+
+.landing-nav-dropdown-panel a {
+    justify-content: flex-start;
+    width: 100%;
 }
 
 .landing-nav-actions,
@@ -521,7 +593,29 @@ body.landing-page[data-theme="dark"] .landing-badge {
     }
 
     .landing-menu {
-        display: none;
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .landing-nav-dropdown {
+        width: 100%;
+    }
+
+    .landing-nav-dropdown summary {
+        width: 100%;
+        justify-content: space-between;
+        border-radius: 16px;
+    }
+
+    .landing-nav-dropdown-panel {
+        position: static;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        margin-top: 10px;
+        border-radius: 18px;
     }
 
     .landing-nav-actions {
