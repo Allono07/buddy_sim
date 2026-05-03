@@ -446,6 +446,24 @@
         }
 
         @media (max-width: 540px) {
+            html,
+            body {
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .story-shell {
+                min-height: 100svh;
+                height: 100svh;
+                overflow: hidden;
+            }
+
+            .story-stage {
+                min-height: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
             .story-home-link {
                 top: 14px;
                 left: 14px;
@@ -455,17 +473,19 @@
             }
 
             .story-content {
-                padding: 18px 14px;
+                padding: 62px 14px 16px;
+                align-items: center;
             }
 
             .story-content-inner {
-                gap: 12px;
-                min-height: calc(100svh - 36px);
+                gap: 10px;
+                min-height: calc(100svh - 78px);
             }
 
             .story-hero {
                 text-align: center;
                 justify-items: center;
+                margin-top: 6px;
             }
 
             .story-hero h1 {
