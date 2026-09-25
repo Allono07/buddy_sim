@@ -25,7 +25,8 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            TrashBuddy
+            <span className="wordmark-start">trash</span>
+            <span>buddy</span>
           </motion.h1>
           <Bin />
         </div>

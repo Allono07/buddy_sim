@@ -24,7 +24,7 @@ export default function Bin() {
       className="hero-bin"
       viewBox="0 0 300 380"
       role="img"
-      aria-label="A silver TrashBuddy dustbin with its lid closing"
+      aria-label="A silver trashbuddy dustbin with its lid closing"
       initial={reduced ? { opacity: 0 } : { y: rise, opacity: 0 }}
       animate={reduced ? { opacity: 1 } : { y: 0, opacity: 1 }}
       transition={
@@ -65,21 +65,22 @@ export default function Bin() {
           <path d="M0 .5h6" stroke="#fff" strokeOpacity=".16" />
           <path d="M0 2h6" stroke="#1d2226" strokeOpacity=".06" />
         </pattern>
-        <filter id="tb-soft" x="-30%" y="-100%" width="160%" height="300%">
-          <feGaussianBlur stdDeviation="6" />
+        <filter id="tb-soft" x="-50%" y="-150%" width="200%" height="400%">
+          <feGaussianBlur stdDeviation="7" />
         </filter>
       </defs>
       <motion.ellipse
-        cx="126"
-        cy="346"
-        rx="70"
-        ry="9"
+        cx="134"
+        cy="354"
+        rx="48"
+        ry="7"
         fill="#1d2a22"
         filter="url(#tb-soft)"
         initial={{ opacity: 0, scale: reduced ? 1 : 0.55 }}
-        animate={{ opacity: 0.32, scale: 1 }}
+        animate={{ opacity: 0.36, scale: 1 }}
         transition={reduced ? { duration: 0.4 } : settle}
       />
+      {/* Body and lid tilt as one rigid unit, so the lid hinge follows the lean. */}
       <motion.g
         style={{ transformBox: "view-box", transformOrigin: BASE }}
         initial={{ rotate: reduced ? LEAN : 3 }}
