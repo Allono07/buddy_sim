@@ -236,30 +236,31 @@ small {
   position: relative;
   max-width: 1100px;
   margin: 0 auto;
-  height: 350px;
+  height: 380px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .wordmark h1 {
-  font-size: clamp(85px, 13.7vw, 190px);
-  letter-spacing: -0.085em;
-  font-weight: 600;
-  display: flex;
-  gap: 105px;
+  position: relative;
+  z-index: 0;
+  font-size: clamp(60px, 12.5vw, 176px);
+  letter-spacing: -0.06em;
+  font-weight: 800;
   line-height: 1;
   margin: 0;
   width: 100%;
-  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
 }
 .hero-bin {
   position: absolute;
   z-index: 1;
-  width: 280px;
-  height: 320px;
-  top: 26px;
-  left: calc(50% - 140px);
-  filter: drop-shadow(0 14px 16px #20382017);
+  width: 290px;
+  height: 367px;
+  top: 0;
+  left: calc(50% - 145px);
+  overflow: visible;
 }
 .hero-bottom {
   display: grid;
@@ -1212,9 +1213,6 @@ footer a {
   .operations {
     gap: 15px;
   }
-  .wordmark h1 {
-    gap: 90px;
-  }
   .hero-bottom {
     grid-template-columns: 1fr 1.3fr 1fr;
   }
@@ -1249,17 +1247,16 @@ footer a {
     padding-top: 38px;
   }
   .wordmark {
-    height: 310px;
+    height: 320px;
   }
   .wordmark h1 {
     font-size: 13vw;
-    gap: 65px;
   }
   .hero-bin {
     width: 240px;
-    height: 275px;
+    height: 304px;
     left: calc(50% - 120px);
-    top: 20px;
+    top: 4px;
   }
   .hero-caption {
     font-size: 9px;
@@ -1368,20 +1365,17 @@ footer a {
     font-size: 8px;
   }
   .wordmark {
-    height: 280px;
-    align-items: start;
-    padding-top: 92px;
+    height: 250px;
   }
   .wordmark h1 {
-    font-size: 16vw;
-    gap: 30px;
-    letter-spacing: -0.07em;
+    font-size: 15vw;
+    letter-spacing: -0.055em;
   }
   .hero-bin {
-    width: 172px;
-    height: 218px;
-    left: calc(50% - 86px);
-    top: 43px;
+    width: 180px;
+    height: 228px;
+    left: calc(50% - 90px);
+    top: 4px;
   }
   .hero-bottom {
     display: flex;
@@ -1540,20 +1534,5 @@ footer a {
   *:after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-}
-@media (max-width: 640px) {
-  .wordmark {
-    padding-top: 70px;
-    height: 295px;
-  }
-  .wordmark h1 {
-    gap: 16px;
-  }
-  .hero-bin {
-    top: 95px;
-    width: 157px;
-    height: 194px;
-    left: calc(50% - 78.5px);
   }
 }
