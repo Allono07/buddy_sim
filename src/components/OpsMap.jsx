@@ -48,11 +48,13 @@ export default function OpsMap({ sim, compact = false }) {
         dashArray: "5 7",
       }).addTo(group);
       L.marker(state.truck, {
-        icon: L.divIcon({
+        alt: "BBMP waste truck",
+        icon: L.icon({
           className: "truck-marker",
-          html: '<span aria-label="BBMP truck">➜</span>',
-          iconSize: [30, 30],
-          iconAnchor: [15, 15],
+          iconUrl: "/assets/images/rider_app.png",
+          iconSize: [38, 38],
+          iconAnchor: [19, 19],
+          popupAnchor: [0, -19],
         }),
       })
         .bindPopup("BBMP Truck")

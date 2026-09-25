@@ -25,8 +25,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <span>Trash</span>
-            <span>Buddy</span>
+            trashbuddy
           </motion.h1>
           <Bin />
         </div>

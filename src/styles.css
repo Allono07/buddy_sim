@@ -236,30 +236,52 @@ small {
   position: relative;
   max-width: 1100px;
   margin: 0 auto;
-  height: 350px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: clamp(240px, 28vw, 370px);
+  display: grid;
+  place-items: center;
+  isolation: isolate;
 }
 .wordmark h1 {
-  font-size: clamp(85px, 13.7vw, 190px);
-  letter-spacing: -0.085em;
-  font-weight: 600;
-  display: flex;
-  gap: 105px;
+  font-size: clamp(48px, 17vw, 210px);
+  letter-spacing: -0.065em;
+  font-weight: 800;
   line-height: 1;
   margin: 0;
-  width: 100%;
-  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
 }
-.hero-bin {
+.hero-bin-stage {
   position: absolute;
   z-index: 1;
-  width: 280px;
-  height: 320px;
-  top: 26px;
-  left: calc(50% - 140px);
-  filter: drop-shadow(0 14px 16px #20382017);
+  width: clamp(48px, 16vw, 200px);
+  aspect-ratio: 280 / 320;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.hero-bin-pose {
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 65%;
+}
+.hero-bin {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(3px 6px 5px #20382017);
+}
+.hero-bin-shadow {
+  position: absolute;
+  width: 66%;
+  height: 7%;
+  left: 6%;
+  bottom: -2%;
+  border-radius: 50%;
+  background: #193a2129;
+  filter: blur(5px);
+  transform: rotate(-8deg);
 }
 .hero-bottom {
   display: grid;
@@ -893,14 +915,8 @@ footer a {
   z-index: 1000;
 }
 .truck-marker {
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #386b39;
-  color: white;
-  border: 3px solid white;
-  box-shadow: 0 0 0 5px #7dab5855;
-  font-size: 19px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px #20382030);
 }
 .map-legend {
   display: flex;
@@ -1212,9 +1228,6 @@ footer a {
   .operations {
     gap: 15px;
   }
-  .wordmark h1 {
-    gap: 90px;
-  }
   .hero-bottom {
     grid-template-columns: 1fr 1.3fr 1fr;
   }
@@ -1247,19 +1260,6 @@ footer a {
   }
   .hero {
     padding-top: 38px;
-  }
-  .wordmark {
-    height: 310px;
-  }
-  .wordmark h1 {
-    font-size: 13vw;
-    gap: 65px;
-  }
-  .hero-bin {
-    width: 240px;
-    height: 275px;
-    left: calc(50% - 120px);
-    top: 20px;
   }
   .hero-caption {
     font-size: 9px;
@@ -1366,22 +1366,6 @@ footer a {
   }
   .hero > .eyebrow {
     font-size: 8px;
-  }
-  .wordmark {
-    height: 280px;
-    align-items: start;
-    padding-top: 92px;
-  }
-  .wordmark h1 {
-    font-size: 16vw;
-    gap: 30px;
-    letter-spacing: -0.07em;
-  }
-  .hero-bin {
-    width: 172px;
-    height: 218px;
-    left: calc(50% - 86px);
-    top: 43px;
   }
   .hero-bottom {
     display: flex;
@@ -1540,20 +1524,5 @@ footer a {
   *:after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-}
-@media (max-width: 640px) {
-  .wordmark {
-    padding-top: 70px;
-    height: 295px;
-  }
-  .wordmark h1 {
-    gap: 16px;
-  }
-  .hero-bin {
-    top: 95px;
-    width: 157px;
-    height: 194px;
-    left: calc(50% - 78.5px);
   }
 }
