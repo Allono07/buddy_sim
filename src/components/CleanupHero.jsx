@@ -7,6 +7,8 @@ import {
   useTransform,
 } from "framer-motion";
 import Bin3D from "./Bin3D";
+import NearbyPhone from "./NearbyPhone";
+import WasteAuto from "./WasteAuto";
 
 // Add future images here; only the four supplied photographs are used today.
 const ITEMS = [
@@ -129,74 +131,80 @@ export default function CleanupHero() {
     };
   }, []);
   const started = modelReady && imagesReady;
+  const [phaseTwo, setPhaseTwo] = useState(!!reduced);
+  useEffect(() => {
+    if (reduced) {
+      setPhaseTwo(true);
+      return;
+    }
+    if (!started || phaseTwo) return;
+    // Phase 1 ends when the final staggered character has resolved (~3.05s).
+    const timer = window.setTimeout(() => setPhaseTwo(true), 3150);
+    return () => window.clearTimeout(timer);
+  }, [started, reduced, phaseTwo]);
   const viewWidth = compact ? 520 : 1100;
   const target = { x: mouth.x * viewWidth, y: mouth.y * 415 };
   return (
-    <div className="wordmark cleanup-reveal" data-ready={started}>
-      <div className="cleanup-stage">
-        <Bin3D
-          started={started}
-          reduced={!!reduced}
-          compact={compact}
-          onReady={onModelReady}
-          onMouth={onMouth}
-        />
-        <svg
-          className="litter-overlay"
-          viewBox={`0 0 ${viewWidth} 415`}
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          {started &&
-            !reduced &&
-            ITEMS.map((item, index) => (
-              <LitterItem
-                key={item[0]}
-                item={item}
-                index={index}
-                compact={compact}
-                mouth={target}
-              />
-            ))}
-        </svg>
-      </div>
-      <h1 aria-label="trashbuddy" className="premium-wordmark">
-        {(started || reduced) && (
-          <motion.span
-            className="wordmark-mask"
+    <div
+      className="wordmark cleanup-reveal"
+      data-ready={started}
+      data-phase-two={phaseTwo}
+    >
+      <NearbyPhone visible={phaseTwo} reduced={!!reduced} />
+      <div className="cleanup-center">
+        <div className="cleanup-stage">
+          <Bin3D
+            started={started}
+            reduced={!!reduced}
+            compact={compact}
+            onReady={onModelReady}
+            onMouth={onMouth}
+          />
+          <svg
+            className="litter-overlay"
+            viewBox={`0 0 ${viewWidth} 415`}
+            preserveAspectRatio="none"
             aria-hidden="true"
-            initial={reduced ? false : { clipPath: "inset(0 0 100% 0)" }}
-            animate={{ clipPath: "inset(0 0 0% 0)" }}
-            transition={{
-              type: "tween",
-              delay: reduced ? 0 : 2.53,
-              duration: reduced ? 0 : 0.75,
-              ease: [0.22, 1, 0.36, 1],
-            }}
           >
-            {["trash", "buddy"].map((group, index) => (
-              <motion.span
-                key={group}
-                className="wordmark-group"
-                initial={
-                  reduced
-                    ? false
-                    : { opacity: 0, y: "45%", filter: "blur(9px)" }
-                }
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{
-                  type: "tween",
-                  delay: reduced ? 0 : 2.53 + index * 0.02,
-                  duration: reduced ? 0 : 0.72,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                {group}
-              </motion.span>
-            ))}
-          </motion.span>
-        )}
-      </h1>
+            {started &&
+              !reduced &&
+              ITEMS.map((item, index) => (
+                <LitterItem
+                  key={item[0]}
+                  item={item}
+                  index={index}
+                  compact={compact}
+                  mouth={target}
+                />
+              ))}
+          </svg>
+        </div>
+        <h1 aria-label="trashbuddy" className="premium-wordmark">
+          {(started || reduced) && (
+            <span className="wordmark-mask" aria-hidden="true">
+              {[..."trashbuddy"].map((letter, index) => (
+                <motion.span
+                  key={`${letter}-${index}`}
+                  className="wordmark-letter"
+                  initial={
+                    reduced ? false : { opacity: 0, y: 12, filter: "blur(6px)" }
+                  }
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{
+                    type: "tween",
+                    delay: reduced ? 0 : 2.53 + index * 0.032,
+                    duration: reduced ? 0 : 0.24,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </span>
+          )}
+        </h1>
+      </div>
+      <WasteAuto visible={phaseTwo} reduced={!!reduced} />
     </div>
   );
 }
