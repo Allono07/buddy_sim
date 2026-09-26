@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 230" fill="none">
+  <ellipse cx="188" cy="197" rx="137" ry="13" fill="#17211A" opacity=".12"/>
+
+  <!-- Raised rear tipper hopper -->
+  <path d="m179 72 27-24h116l-11 78H184z" fill="#E9BF45" stroke="#344C39" stroke-width="5" stroke-linejoin="round"/>
+  <path d="m193 65 19-15h91l-8 15z" fill="#F3D36F" stroke="#344C39" stroke-width="4" stroke-linejoin="round"/>
+  <path d="m192 78 116 0-8 44H194z" fill="#F5F2E9" stroke="#344C39" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M205 86h87M202 94h88M200 102h87" stroke="#D5D8CF" stroke-width="3" stroke-linecap="round"/>
+  <path d="m185 122 132 0-7 18H181z" fill="#3F7048" stroke="#344C39" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- Open-sided auto-rickshaw cab and front cowl -->
+  <path d="M83 96q5-39 39-45l49-1q14 0 20 15l10 43-30 17H94z" fill="#F5F2E9" stroke="#344C39" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M112 62q8-8 18-8h27q10 0 14 11l8 34h-74z" fill="#A9C7C3" stroke="#344C39" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M120 63h31v32h-38l2-23q1-6 5-9z" fill="#D8E5DF"/>
+  <path d="M158 62q8 1 10 8l7 24h-17z" fill="#90B1AF"/>
+  <path d="M182 72h17l11 40-16 8z" fill="#3F7048" stroke="#344C39" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M92 105h112l-7 33H91z" fill="#3F7048" stroke="#344C39" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M84 133h232l-13 21H72l4-13z" fill="#E9BF45" stroke="#344C39" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M73 139H54q-10 0-13 9l-3 10h39z" fill="#F5F2E9" stroke="#344C39" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M42 147h27v8H40z" fill="#D9B947"/>
+  <path d="M84 48q9-13 27-13h52q15 0 23 13" stroke="#344C39" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- BBMP SWM badge and the three-wheel stance -->
+  <rect x="226" y="128" width="54" height="21" rx="4" fill="#F5F2E9" stroke="#344C39" stroke-width="2"/>
+  <text x="253" y="137" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#315E3B">BBMP</text>
+  <text x="253" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="700" letter-spacing=".7" fill="#315E3B">SWM</text>
+  <circle cx="91" cy="169" r="24" fill="#26342C" stroke="#344C39" stroke-width="4"/>
+  <circle cx="91" cy="169" r="11" fill="#D6D9D0" stroke="#F5F2E9" stroke-width="4"/>
+  <circle cx="251" cy="169" r="24" fill="#26342C" stroke="#344C39" stroke-width="4"/>
+  <circle cx="251" cy="169" r="11" fill="#D6D9D0" stroke="#F5F2E9" stroke-width="4"/>
+  <circle cx="291" cy="166" r="21" fill="#26342C" stroke="#344C39" stroke-width="4"/>
+  <circle cx="291" cy="166" r="9" fill="#D6D9D0" stroke="#F5F2E9" stroke-width="4"/>
+  <path d="M90 141v9m160 0v-9m41 0v-9" stroke="#344C39" stroke-width="4" stroke-linecap="round"/>
+</svg>

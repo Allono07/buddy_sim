@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   ArrowLeft,
@@ -11,22 +12,33 @@ import {
 import CleanupHero from "../components/CleanupHero";
 export default function Home() {
   const [slide, setSlide] = useState(0);
+  const [lidClosed, setLidClosed] = useState(false);
+  const reduced = useReducedMotion();
+  const revealSupportingCopy = useCallback(() => setLidClosed(true), []);
   return (
     <>
       <section className="hero">
         <div className="eyebrow">
           <span className="live-dot" /> A LITTLE SMARTER. A LOT CLEANER.
         </div>
-        <CleanupHero />
+        <CleanupHero onLidClosed={revealSupportingCopy} />
         <div className="hero-bottom">
-          <div className="hero-caption">
+          <motion.div
+            className="hero-caption"
+            initial={reduced ? false : { opacity: 0, y: 10 }}
+            animate={lidClosed || reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            transition={{
+              duration: reduced ? 0 : 0.5,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
             <Leaf size={18} />
             <span>
               Be a smarter citizen.
               <br />
               <strong>Make room for a cleaner tomorrow.</strong>
             </span>
-          </div>
+          </motion.div>
           <div className="hero-intro">
             <p>A live BBMP waste truck tracker/alert application</p>
             <Link className="button primary" to="/simulationdashboard">

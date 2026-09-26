@@ -96,7 +96,7 @@ function LitterItem({ item, index, compact, mouth }) {
     </motion.g>
   );
 }
-export default function CleanupHero() {
+export default function CleanupHero({ onLidClosed }) {
   const reduced = useReducedMotion();
   const [compact, setCompact] = useState(
     () => window.matchMedia("(max-width: 640px)").matches,
@@ -135,13 +135,19 @@ export default function CleanupHero() {
   useEffect(() => {
     if (reduced) {
       setPhaseTwo(true);
+      onLidClosed?.();
       return;
     }
     if (!started || phaseTwo) return;
+    // The lid finishes closing at 2.5s; reveal the mobile supporting copy just after.
+    const lidTimer = window.setTimeout(() => onLidClosed?.(), 2550);
     // Phase 1 ends when the final staggered character has resolved (~3.05s).
-    const timer = window.setTimeout(() => setPhaseTwo(true), 3150);
-    return () => window.clearTimeout(timer);
-  }, [started, reduced, phaseTwo]);
+    const phaseTimer = window.setTimeout(() => setPhaseTwo(true), 3150);
+    return () => {
+      window.clearTimeout(lidTimer);
+      window.clearTimeout(phaseTimer);
+    };
+  }, [started, reduced, phaseTwo, onLidClosed]);
   const viewWidth = compact ? 520 : 1100;
   const target = { x: mouth.x * viewWidth, y: mouth.y * 415 };
   return (
@@ -150,7 +156,10 @@ export default function CleanupHero() {
       data-ready={started}
       data-phase-two={phaseTwo}
     >
-      <NearbyPhone visible={phaseTwo} reduced={!!reduced} />
+      <div className="cleanup-sidecars">
+        <NearbyPhone visible={phaseTwo} reduced={!!reduced} />
+        <WasteAuto visible={phaseTwo} reduced={!!reduced} />
+      </div>
       <div className="cleanup-center">
         <div className="cleanup-stage">
           <Bin3D
@@ -204,7 +213,6 @@ export default function CleanupHero() {
           )}
         </h1>
       </div>
-      <WasteAuto visible={phaseTwo} reduced={!!reduced} />
     </div>
   );
 }

@@ -32,7 +32,8 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
   const camera = new THREE.OrthographicCamera(-1, 1, 0.52, -0.52, 0.01, 20);
   camera.position.set(0.65, 1.05, 2.3);
   camera.lookAt(0, 0.42, 0);
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x9ba8b4, 0.7));
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x9ba8b4, 0.7);
+  scene.add(hemi);
   const key = new THREE.DirectionalLight(0xfffaf1, 1.8);
   key.position.set(-1.5, 2.5, 3);
   key.castShadow = true;
@@ -48,15 +49,47 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
   const shadowCanvas = document.createElement("canvas");
   shadowCanvas.width = shadowCanvas.height = 128;
   const ctx = shadowCanvas.getContext("2d");
-  const gradient = ctx.createRadialGradient(64, 64, 12, 64, 64, 64);
-  gradient.addColorStop(0, "rgba(24, 30, 27, 0.23)");
-  gradient.addColorStop(1, "rgba(24, 30, 27, 0)");
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, 128, 128);
+  const shadowTexture = new THREE.CanvasTexture(shadowCanvas);
+  function paintGroundShadow(dark) {
+    ctx.clearRect(0, 0, 128, 128);
+    const gradient = ctx.createRadialGradient(64, 64, 8, 64, 64, 64);
+    gradient.addColorStop(
+      0,
+      dark ? "rgba(8, 10, 8, 0.5)" : "rgba(24, 30, 27, 0.36)",
+    );
+    gradient.addColorStop(
+      0.62,
+      dark ? "rgba(8, 10, 8, 0.22)" : "rgba(24, 30, 27, 0.14)",
+    );
+    gradient.addColorStop(1, "rgba(24, 30, 27, 0)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, 128, 128);
+    shadowTexture.needsUpdate = true;
+  }
+  const darkTheme = () => document.documentElement.dataset.theme === "dark";
+  function updateThemeLighting() {
+    const dark = darkTheme();
+    hemi.color.set(dark ? 0xd0d1c8 : 0xffffff);
+    hemi.groundColor.set(dark ? 0x55574e : 0x9ba8b4);
+    hemi.intensity = dark ? 0.48 : 0.7;
+    key.color.set(dark ? 0xffffff : 0xfffaf1);
+    key.intensity = dark ? 2.15 : 1.8;
+    fill.color.set(dark ? 0xb8c1b1 : 0xe6f0ff);
+    fill.intensity = dark ? 0.28 : 0.8;
+    scene.environmentIntensity = dark ? 0.72 : 1;
+    paintGroundShadow(dark);
+    render();
+  }
+  const themeObserver = new MutationObserver(updateThemeLighting);
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  updateThemeLighting();
   const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.9, 0.7),
+    new THREE.PlaneGeometry(1.3, 0.95),
     new THREE.MeshBasicMaterial({
-      map: new THREE.CanvasTexture(shadowCanvas),
+      map: shadowTexture,
       transparent: true,
       depthWrite: false,
     }),
@@ -192,6 +225,7 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
         root.rotation.set(-Math.PI / 2, 0, 0);
         root.rotateZ(-Math.PI / 2);
         scene.add(root);
+        updateThemeLighting();
         host.dataset.model = "bin.glb";
         resize();
         tick(performance.now());
@@ -209,6 +243,7 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
     dispose() {
       disposed = true;
       cancelAnimationFrame(frame);
+      themeObserver.disconnect();
       observer.disconnect();
       disposeObject(scene);
       environment?.dispose();

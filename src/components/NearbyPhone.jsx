@@ -18,7 +18,6 @@ export default function NearbyPhone({ visible, reduced }) {
             }
       }
     >
-      <span className="nearby-eyebrow">THE RESIDENT APP</span>
       <div className="phone nearby-phone">
         <div className="phone-status">
           <span>9:41</span>
@@ -49,49 +48,58 @@ export default function NearbyPhone({ visible, reduced }) {
               role="img"
               aria-label="Waste truck near resident on a neighborhood map"
             >
-              <rect width="220" height="130" fill="#e8eee5" />
+              <rect width="220" height="130" fill="var(--map-ground)" />
               <path
                 d="M-10 31 235 90M24-14 102 150M158-8 88 143M-12 111 226 26M-6 70 223 122"
                 fill="none"
-                stroke="#fff"
+                stroke="var(--map-road)"
                 strokeWidth="12"
               />
               <path
                 d="M-10 31 235 90M24-14 102 150M158-8 88 143M-12 111 226 26M-6 70 223 122"
                 fill="none"
-                stroke="#c8d2c2"
+                stroke="var(--map-road-edge)"
                 strokeWidth="1.4"
               />
               <path
                 d="M18 100h43v22H18zm114-89h41v16h-41zM152 95h55v24h-55z"
-                fill="#d8e3d1"
+                fill="var(--map-block)"
               />
-              <path d="M32 17h42v20H32zm120 36h40v20h-40z" fill="#d7e0d2" />
+              <path
+                d="M32 17h42v20H32zm120 36h40v20h-40z"
+                fill="var(--map-block-alt)"
+              />
               <path
                 d="M42 74 94 56l49 20"
                 fill="none"
-                stroke="#80aa72"
+                stroke="var(--map-route)"
                 strokeWidth="3"
                 strokeDasharray="5 5"
               />
-              <circle cx="47" cy="76" r="12" fill="#fff" />
-              <circle cx="47" cy="76" r="8" fill="#cf8158" />
+              <circle cx="47" cy="76" r="12" fill="var(--map-marker-halo)" />
+              <circle cx="47" cy="76" r="8" fill="var(--map-home)" />
               <path d="M43 76h8m-4-4v8" stroke="#fff" strokeWidth="1.5" />
-              <circle cx="137" cy="75" r="14" fill="#579153" opacity=".16" />
+              <circle
+                cx="137"
+                cy="75"
+                r="14"
+                fill="var(--map-truck)"
+                opacity=".16"
+              />
               <circle
                 cx="137"
                 cy="75"
                 r="9"
-                fill="#579153"
-                stroke="#fff"
+                fill="var(--map-truck)"
+                stroke="var(--map-marker-halo)"
                 strokeWidth="3"
               />
               <path d="M132 75h10l-2-4h-5z" fill="#fff" />
-              <circle cx="170" cy="43" r="3" fill="#fff" />
-              <text x="20" y="119" fontSize="7" fill="#5e7060">
+              <circle cx="170" cy="43" r="3" fill="var(--map-marker-halo)" />
+              <text x="20" y="119" fontSize="7" fill="var(--map-label)">
                 YOUR HOME
               </text>
-              <text x="121" y="61" fontSize="7" fill="#5e7060">
+              <text x="121" y="61" fontSize="7" fill="var(--map-label)">
                 BBMP TRUCK
               </text>
             </svg>
