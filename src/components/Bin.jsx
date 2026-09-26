@@ -1,12 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
 
-// Resting pose: the bin leans right around the centre of its base.
-const LEAN = 12;
-const BASE = "122px 325px";
-// Lid hinge sits on the back-left edge of the rim.
-const HINGE = "48px 106px";
-const LID_OPEN = -42;
-
 // Stamped ribs: [y, rx, ry] of the front arc at each band.
 const RIBS = [
   [152, 67.6, 14.4],
@@ -15,23 +8,14 @@ const RIBS = [
   [284, 60.1, 12.5],
 ];
 
-export default function Bin() {
+export default function Bin({ compact = false, children, started = true }) {
   const reduced = useReducedMotion();
-  const rise = window.matchMedia("(max-width: 640px)").matches ? 140 : 260;
-  const settle = { delay: 0.25, duration: 0.85, ease: [0.22, 1, 0.36, 1] };
   return (
-    <motion.svg
+    <svg
       className="hero-bin"
-      viewBox="0 0 300 380"
+      viewBox={compact ? "-138 -50 520 415" : "-428 -50 1100 415"}
       role="img"
-      aria-label="A silver TrashBuddy dustbin with its lid closing"
-      initial={reduced ? { opacity: 0 } : { y: rise, opacity: 0 }}
-      animate={reduced ? { opacity: 1 } : { y: 0, opacity: 1 }}
-      transition={
-        reduced
-          ? { duration: 0.4 }
-          : { ...settle, opacity: { delay: 0.25, duration: 0.3 } }
-      }
+      aria-label="An upright silver dustbin with a brushed steel body and hinged lid"
     >
       <defs>
         <linearGradient id="tb-steel" x1="0" x2="1">
@@ -69,135 +53,128 @@ export default function Bin() {
           <feGaussianBlur stdDeviation="6" />
         </filter>
       </defs>
-      <motion.ellipse
-        cx="126"
-        cy="346"
-        rx="70"
-        ry="9"
-        fill="#1d2a22"
+      <ellipse
+        cx="122"
+        cy="340"
+        rx="83"
+        ry="8"
+        fill="#22272b"
+        opacity="0.22"
         filter="url(#tb-soft)"
-        initial={{ opacity: 0, scale: reduced ? 1 : 0.55 }}
-        animate={{ opacity: 0.32, scale: 1 }}
-        transition={reduced ? { duration: 0.4 } : settle}
       />
+      <g id="bin-body">
+        <ellipse cx="122" cy="110" rx="68" ry="13.5" fill="url(#tb-inside)" />
+        <path
+          d="M52 110 64 320a58 12 0 0 0 116 0l12-210a70 15 0 0 0-140 0Z"
+          fill="url(#tb-steel)"
+        />
+        <path
+          d="M52 110 64 320a58 12 0 0 0 116 0l12-210a70 15 0 0 0-140 0Z"
+          fill="url(#tb-brushed)"
+        />
+        {RIBS.map(([y, rx, ry]) => (
+          <g key={y} fill="none">
+            <path
+              d={`M${122 - rx} ${y - 5}a${rx} ${ry} 0 0 0 ${rx * 2} 0`}
+              stroke="#1d2226"
+              strokeOpacity=".06"
+              strokeWidth="5"
+            />
+            <path
+              d={`M${122 - rx} ${y}a${rx} ${ry} 0 0 0 ${rx * 2} 0`}
+              stroke="#2b3136"
+              strokeOpacity=".28"
+              strokeWidth="1.6"
+            />
+            <path
+              d={`M${122 - rx} ${y + 3}a${rx} ${ry} 0 0 0 ${rx * 2} 0`}
+              stroke="#fff"
+              strokeOpacity=".45"
+              strokeWidth="1.5"
+            />
+          </g>
+        ))}
+        <path
+          d="M52 110 64 320a58 12 0 0 0 116 0l12-210a70 15 0 0 0-140 0Z"
+          fill="url(#tb-occlusion)"
+        />
+        <path
+          d="M64 314a58 12 0 0 0 116 0v7a58 12 0 0 1-116 0Z"
+          fill="#5d656c"
+        />
+        <path
+          d="M64 321a58 12 0 0 0 116 0"
+          fill="none"
+          stroke="#c2c8cd"
+          strokeOpacity=".7"
+        />
+        <ellipse
+          cx="122"
+          cy="110"
+          rx="70.5"
+          ry="15"
+          fill="none"
+          stroke="#b8bec3"
+          strokeWidth="5"
+        />
+        <path
+          d="M52 112a70 15 0 0 0 140 0"
+          fill="none"
+          stroke="#f4f6f7"
+          strokeOpacity=".8"
+          strokeWidth="1.5"
+        />
+        <rect x="42" y="102" width="10" height="12" rx="2" fill="#5b6269" />
+      </g>
+      {children}
       <motion.g
-        style={{ transformBox: "view-box", transformOrigin: BASE }}
-        initial={{ rotate: reduced ? LEAN : 3 }}
-        animate={{ rotate: LEAN }}
-        transition={reduced ? { duration: 0 } : settle}
+        id="bin-lid"
+        // The lid bounds begin at (48, 89.4); hinge is (48, 106).
+        style={{ transformBox: "fill-box", originX: 0, originY: 16.6 / 37.6 }}
+        initial={{ rotate: reduced ? 0 : -52 }}
+        animate={{ rotate: reduced || started ? 0 : -52 }}
+        transition={
+          reduced
+            ? { duration: 0 }
+            : { type: "tween", delay: 2, duration: 0.5, ease: "easeInOut" }
+        }
       >
-        <g id="bin-body">
-          <ellipse cx="122" cy="110" rx="68" ry="13.5" fill="url(#tb-inside)" />
-          <path
-            d="M52 110 64 320a58 12 0 0 0 116 0l12-210a70 15 0 0 0-140 0Z"
-            fill="url(#tb-steel)"
-          />
-          <path
-            d="M52 110 64 320a58 12 0 0 0 116 0l12-210a70 15 0 0 0-140 0Z"
-            fill="url(#tb-brushed)"
-          />
-          {RIBS.map(([y, rx, ry]) => (
-            <g key={y} fill="none">
-              <path
-                d={`M${122 - rx} ${y - 5}a${rx} ${ry} 0 0 0 ${rx * 2} 0`}
-                stroke="#1d2226"
-                strokeOpacity=".06"
-                strokeWidth="5"
-              />
-              <path
-                d={`M${122 - rx} ${y}a${rx} ${ry} 0 0 0 ${rx * 2} 0`}
-                stroke="#2b3136"
-                strokeOpacity=".28"
-                strokeWidth="1.6"
-              />
-              <path
-                d={`M${122 - rx} ${y + 3}a${rx} ${ry} 0 0 0 ${rx * 2} 0`}
-                stroke="#fff"
-                strokeOpacity=".45"
-                strokeWidth="1.5"
-              />
-            </g>
-          ))}
-          <path
-            d="M52 110 64 320a58 12 0 0 0 116 0l12-210a70 15 0 0 0-140 0Z"
-            fill="url(#tb-occlusion)"
-          />
-          <path
-            d="M64 314a58 12 0 0 0 116 0v7a58 12 0 0 1-116 0Z"
-            fill="#5d656c"
-          />
-          <path
-            d="M64 321a58 12 0 0 0 116 0"
-            fill="none"
-            stroke="#c2c8cd"
-            strokeOpacity=".7"
-          />
-          <ellipse
-            cx="122"
-            cy="110"
-            rx="70.5"
-            ry="15"
-            fill="none"
-            stroke="#b8bec3"
-            strokeWidth="5"
-          />
-          <path
-            d="M52 112a70 15 0 0 0 140 0"
-            fill="none"
-            stroke="#f4f6f7"
-            strokeOpacity=".8"
-            strokeWidth="1.5"
-          />
-          <rect x="42" y="102" width="10" height="12" rx="2" fill="#5b6269" />
-        </g>
-        <motion.g
-          id="bin-lid"
-          style={{ transformBox: "view-box", transformOrigin: HINGE }}
-          initial={{ rotate: reduced ? 0 : LID_OPEN }}
-          animate={{ rotate: 0 }}
-          transition={
-            reduced
-              ? { duration: 0 }
-              : { delay: 1, duration: 0.5, ease: "easeInOut" }
-          }
-        >
-          <path d="M48 103v8a74 16 0 0 0 148 0v-8Z" fill="url(#tb-steel)" />
-          <path
-            d="M48 111a74 16 0 0 0 148 0"
-            fill="none"
-            stroke="#3d4449"
-            strokeOpacity=".45"
-          />
-          <ellipse cx="122" cy="103" rx="74" ry="16" fill="url(#tb-lid-top)" />
-          <ellipse cx="122" cy="103" rx="74" ry="16" fill="url(#tb-brushed)" />
-          <ellipse
-            cx="122"
-            cy="103.5"
-            rx="54"
-            ry="11"
-            fill="none"
-            stroke="#6f777e"
-            strokeOpacity=".35"
-            strokeWidth="1.5"
-          />
-          <path d="M115 102v-8h14v8Z" fill="#6c747b" />
-          <ellipse
-            cx="122"
-            cy="102"
-            rx="9"
-            ry="2.6"
-            fill="#1d2226"
-            opacity=".2"
-          />
-          <ellipse cx="122" cy="93" rx="11" ry="3.6" fill="#dfe3e6" />
-          <path
-            d="M111 93a11 3.6 0 0 0 22 0"
-            fill="none"
-            stroke="#6f777e"
-            strokeWidth="1.2"
-          />
-        </motion.g>
+        <path d="M48 103v8a74 16 0 0 0 148 0v-8Z" fill="url(#tb-steel)" />
+        <path
+          d="M48 111a74 16 0 0 0 148 0"
+          fill="none"
+          stroke="#3d4449"
+          strokeOpacity=".45"
+        />
+        <ellipse cx="122" cy="103" rx="74" ry="16" fill="url(#tb-lid-top)" />
+        <ellipse cx="122" cy="103" rx="74" ry="16" fill="url(#tb-brushed)" />
+        <ellipse
+          cx="122"
+          cy="103.5"
+          rx="54"
+          ry="11"
+          fill="none"
+          stroke="#6f777e"
+          strokeOpacity=".35"
+          strokeWidth="1.5"
+        />
+        <path d="M115 102v-8h14v8Z" fill="#6c747b" />
+        <ellipse
+          cx="122"
+          cy="102"
+          rx="9"
+          ry="2.6"
+          fill="#1d2226"
+          opacity=".2"
+        />
+        <ellipse cx="122" cy="93" rx="11" ry="3.6" fill="#dfe3e6" />
+        <path
+          d="M111 93a11 3.6 0 0 0 22 0"
+          fill="none"
+          stroke="#6f777e"
+          strokeWidth="1.2"
+        />
       </motion.g>
-    </motion.svg>
+    </svg>
   );
 }

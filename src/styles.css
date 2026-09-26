@@ -226,41 +226,69 @@ small {
   padding: 45px 5% 35px;
   overflow: hidden;
   position: relative;
-  background: radial-gradient(ellipse at 50% 50%, #dce9c977, transparent 57%);
+  background: #fcfcfa;
 }
 .hero > .eyebrow {
   display: flex;
   justify-content: center;
 }
 .wordmark {
-  position: relative;
   max-width: 1100px;
-  margin: 0 auto;
-  height: 380px;
+  margin: 14px auto 42px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: clamp(14px, 2vw, 26px);
 }
 .wordmark h1 {
-  position: relative;
-  z-index: 0;
-  font-size: clamp(60px, 12.5vw, 176px);
-  letter-spacing: -0.06em;
+  font-size: clamp(48px, 13.5vw, 164px);
+  letter-spacing: -0.065em;
   font-weight: 800;
-  line-height: 1;
+  line-height: 1.08;
   margin: 0;
-  width: 100%;
   text-align: center;
   white-space: nowrap;
 }
+.cleanup-stage {
+  width: 100%;
+  height: clamp(280px, 34.6vw, 415px);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
 .hero-bin {
-  position: absolute;
-  z-index: 1;
-  width: 290px;
-  height: 367px;
-  top: 0;
-  left: calc(50% - 145px);
+  display: block;
+  width: 100%;
+  height: 100%;
   overflow: visible;
+}
+.bin-3d,
+.bin-fallback,
+.litter-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.bin-3d canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.litter-overlay {
+  pointer-events: none;
+  overflow: visible;
+}
+.premium-wordmark {
+  height: 1.2em;
+}
+.wordmark-mask {
+  display: block;
+  padding: 0.06em 0.08em;
+  margin: -0.06em -0.08em;
+}
+.wordmark-group {
+  display: inline-block;
 }
 .hero-bottom {
   display: grid;
@@ -1155,7 +1183,7 @@ footer a {
   background: var(--bg);
 }
 [data-theme="dark"] .hero {
-  background: radial-gradient(ellipse at center, #4b603a55, transparent 65%);
+  background: var(--bg);
 }
 [data-theme="dark"] .status.online {
   background: #32452b;
@@ -1245,18 +1273,6 @@ footer a {
   }
   .hero {
     padding-top: 38px;
-  }
-  .wordmark {
-    height: 320px;
-  }
-  .wordmark h1 {
-    font-size: 13vw;
-  }
-  .hero-bin {
-    width: 240px;
-    height: 304px;
-    left: calc(50% - 120px);
-    top: 4px;
   }
   .hero-caption {
     font-size: 9px;
@@ -1363,19 +1379,6 @@ footer a {
   }
   .hero > .eyebrow {
     font-size: 8px;
-  }
-  .wordmark {
-    height: 250px;
-  }
-  .wordmark h1 {
-    font-size: 15vw;
-    letter-spacing: -0.055em;
-  }
-  .hero-bin {
-    width: 180px;
-    height: 228px;
-    left: calc(50% - 90px);
-    top: 4px;
   }
   .hero-bottom {
     display: flex;

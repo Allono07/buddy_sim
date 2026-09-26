@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   ArrowLeft,
@@ -9,26 +8,16 @@ import {
   Radio,
   Leaf,
 } from "lucide-react";
-import Bin from "../components/Bin";
+import CleanupHero from "../components/CleanupHero";
 export default function Home() {
   const [slide, setSlide] = useState(0);
-  const reduced = useReducedMotion();
   return (
     <>
       <section className="hero">
         <div className="eyebrow">
           <span className="live-dot" /> A LITTLE SMARTER. A LOT CLEANER.
         </div>
-        <div className="wordmark">
-          <motion.h1
-            initial={{ opacity: 0, y: reduced ? 0 : 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            TrashBuddy
-          </motion.h1>
-          <Bin />
-        </div>
+        <CleanupHero />
         <div className="hero-bottom">
           <div className="hero-caption">
             <Leaf size={18} />
