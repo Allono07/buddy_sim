@@ -10,12 +10,20 @@ import Bin3D from "./Bin3D";
 import NearbyPhone from "./NearbyPhone";
 import WasteAuto from "./WasteAuto";
 
-// Add future images here; only the four supplied photographs are used today.
+// Reuse the four supplied photographs three times each until more are added.
 const ITEMS = [
   ["waste1.png", -330, -35, -20, 126],
   ["waste2.png", 305, 40, 15, 140],
   ["waste3.png", -260, 155, 24, 130],
   ["waste4.png", 280, 175, -18, 126],
+  ["waste1.png", -370, 90, 14, 112],
+  ["waste2.png", 360, -100, -24, 118],
+  ["waste3.png", -175, -155, -8, 110],
+  ["waste4.png", 175, 245, 20, 116],
+  ["waste1.png", -120, 255, -12, 108],
+  ["waste2.png", 120, -205, 28, 120],
+  ["waste3.png", -380, 225, -25, 114],
+  ["waste4.png", 385, 170, 12, 110],
 ];
 const cubic = (a, b, c, d, t) =>
   (1 - t) ** 3 * a +
@@ -179,7 +187,7 @@ export default function CleanupHero({ onLidClosed }) {
               !reduced &&
               ITEMS.map((item, index) => (
                 <LitterItem
-                  key={item[0]}
+                  key={`${item[0]}-${index}`}
                   item={item}
                   index={index}
                   compact={compact}

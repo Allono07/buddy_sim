@@ -8,13 +8,14 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
   let startedAt = null;
   let playing = false;
   let reduced = false;
-  let lid;
+  let lidPivot;
   let root;
   let environment;
+  const openAngle = 32;
   const closed = new THREE.Quaternion();
-  let opened = new THREE.Quaternion().setFromAxisAngle(
-    new THREE.Vector3(1, -1, 0).normalize(),
-    THREE.MathUtils.degToRad(65),
+  const opened = new THREE.Quaternion().setFromAxisAngle(
+    new THREE.Vector3(1, 0, 0),
+    THREE.MathUtils.degToRad(-openAngle),
   );
   const renderer = new THREE.WebGLRenderer({
     alpha: true,
@@ -111,7 +112,7 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
   function resize() {
     const { width, height } = host.getBoundingClientRect();
     if (!width || !height || disposed) return;
-    const halfHeight = width < 640 ? 0.64 : 0.6;
+    const halfHeight = 0.72;
     camera.top = halfHeight;
     camera.bottom = -halfHeight;
     camera.left = (-halfHeight * width) / height;
@@ -119,9 +120,12 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
     camera.updateProjectionMatrix();
     renderer.setSize(width, height, false);
     if (root) {
+      const modelScale = width < 640 ? 0.66 : 0.76;
+      root.scale.setScalar(modelScale);
+      root.position.y = -0.08 * modelScale;
       scene.updateMatrixWorld(true);
       const mouth = root
-        .localToWorld(new THREE.Vector3(0, 0, 0.6))
+        .localToWorld(new THREE.Vector3(0, 0, 0.99))
         .project(camera);
       onMouth({ x: (mouth.x + 1) / 2, y: (1 - mouth.y) / 2 });
     }
@@ -131,12 +135,12 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
   observer.observe(host);
   function tick(now) {
     frame = 0;
-    if (disposed || !lid) return;
+    if (disposed || !lidPivot) return;
     const elapsed = startedAt === null ? 0 : (now - startedAt) / 1000;
     const t = reduced ? 1 : THREE.MathUtils.clamp((elapsed - 2) / 0.5, 0, 1);
     const eased = t * t * (3 - 2 * t);
-    lid.quaternion.copy(opened).slerp(closed, eased);
-    host.dataset.lidAngle = String((1 - eased) * 65);
+    lidPivot.quaternion.copy(opened).slerp(closed, eased);
+    host.dataset.lidAngle = String((1 - eased) * openAngle);
     render();
     if (playing && !reduced && elapsed < 2.5)
       frame = requestAnimationFrame(tick);
@@ -165,7 +169,7 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
     });
   }
   new GLTFLoader().load(
-    "/assets/3d/bin.glb",
+    "/assets/dustbinpackage/trashbuddy_wheelie_bin.glb",
     (gltf) => {
       if (disposed) {
         disposeObject(gltf.scene);
@@ -173,15 +177,11 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
       }
       try {
         root = gltf.scene;
-        const body = root.getObjectByName("bin_body");
-        lid = root.getObjectByName("bin_lid");
+        const body = root.getObjectByName("Bin_Body");
+        const lid = root.getObjectByName("Lid");
+        const greenDetail = root.getObjectByName("Lower_Foot_Lip")?.material;
         if (!body || !lid)
-          throw new Error("The bin model needs separate body and lid meshes.");
-        const optionalGround = root.getObjectByName("ground_plane_optional");
-        if (optionalGround) {
-          optionalGround.removeFromParent();
-          disposeObject(optionalGround);
-        }
+          throw new Error("The wheelie-bin model needs separate body and lid meshes.");
         root.traverse((child) => {
           if (child.isMesh) {
             child.geometry.computeVertexNormals();
@@ -189,44 +189,60 @@ export function createBinScene(host, { onReady, onError, onMouth }) {
             child.receiveShadow = true;
           }
         });
-        // This supplied Z-up GLB stores hinge-relative lid vertices, but omits its node translation and material.
-        // Remove the supplied cylinder's top disk so waste can enter the actual opening.
+        // The model is Z-up; remove only the body's flat top cap to leave the bin mouth open.
         const positions = body.geometry.attributes.position;
         const indices = body.geometry.index.array;
         const openIndices = [];
+        body.geometry.computeBoundingBox();
+        const top = body.geometry.boundingBox.max.z;
         for (let i = 0; i < indices.length; i += 3) {
           const triangle = [indices[i], indices[i + 1], indices[i + 2]];
-          if (!triangle.every((index) => positions.getZ(index) > 0.599))
+          if (!triangle.every((index) => positions.getZ(index) >= top - 1e-4))
             openIndices.push(...triangle);
         }
         body.geometry.setIndex(openIndices);
         body.geometry.computeVertexNormals();
-        body.material.side = THREE.DoubleSide;
-        lid.geometry.computeBoundingBox();
-        body.geometry.computeBoundingBox();
-        const lidCenter = lid.geometry.boundingBox.getCenter(
-          new THREE.Vector3(),
+        if (greenDetail) {
+          body.material = greenDetail.clone();
+          lid.material = greenDetail.clone();
+          body.material.color.set(0x0b681d);
+          lid.material.color.set(0x0b681d);
+          body.material.side = THREE.DoubleSide;
+          lid.material.side = THREE.DoubleSide;
+        }
+
+        // Parent the lid to the model's rear hinge so it closes flush and rotates smoothly.
+        const hinge = new THREE.Vector3(0, 0.339, 0.985);
+        lidPivot = new THREE.Group();
+        lidPivot.name = "bin_lid_pivot";
+        lidPivot.position.copy(hinge);
+        root.add(lidPivot);
+        lid.position.sub(hinge);
+        lidPivot.add(lid);
+
+        // The package uses a temporary municipal decal. Repair the nearly-transparent
+        // exported material while preserving the decal's embedded alpha texture.
+        const decal = root.getObjectByName(
+          "TrashBuddy_Logo_DECAL__REFERENCE_MARK",
         );
-        lid.position.set(
-          -lidCenter.x,
-          -lidCenter.y,
-          body.geometry.boundingBox.max.z,
-        );
-        lid.material.dispose();
-        lid.material = body.material.clone();
-        const rotationTrack = gltf.animations[0]?.tracks.find((track) =>
-          track.name.endsWith(".quaternion"),
-        );
-        if (rotationTrack)
-          opened.fromArray(
-            rotationTrack.values,
-            rotationTrack.values.length - 4,
-          );
+        const decalMaterial = Array.isArray(decal?.material)
+          ? decal.material[0]
+          : decal?.material;
+        if (decal && decalMaterial?.map) {
+          decalMaterial.map.colorSpace = THREE.SRGBColorSpace;
+          decalMaterial.color.set(0xffffff);
+          decalMaterial.opacity = 1;
+          decalMaterial.transparent = true;
+          decalMaterial.alphaTest = 0.04;
+          decalMaterial.depthWrite = false;
+          decalMaterial.side = THREE.DoubleSide;
+          decalMaterial.needsUpdate = true;
+        }
+
         root.rotation.set(-Math.PI / 2, 0, 0);
-        root.rotateZ(-Math.PI / 2);
         scene.add(root);
         updateThemeLighting();
-        host.dataset.model = "bin.glb";
+        host.dataset.model = "trashbuddy_wheelie_bin.glb";
         resize();
         tick(performance.now());
         onReady();

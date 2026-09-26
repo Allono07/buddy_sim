@@ -135,7 +135,7 @@ export default function NearbyPhone({ visible, reduced }) {
             >
               <Bell size={17} />
               <div>
-                <strong>Waste truck nearby!</strong>
+                <strong>BBMP auto nearby!</strong>
                 <p>Your collection truck is approaching.</p>
               </div>
               <X size={13} />

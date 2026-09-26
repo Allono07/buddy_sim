@@ -1205,6 +1205,12 @@ footer a {
   color: var(--text);
   background: var(--bg);
 }
+[data-theme="dark"] .nav-cta,
+[data-theme="dark"] .hero-intro .button.primary {
+  background: #2e9c40 !important;
+  border-color: #2e9c40 !important;
+  color: #fff !important;
+}
 [data-theme="dark"] .hero {
   background: var(--bg);
 }

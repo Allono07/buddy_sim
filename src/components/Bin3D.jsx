@@ -50,7 +50,7 @@ export default function Bin3D({ started, reduced, compact, onReady, onMouth }) {
         ref={host}
         className="bin-3d"
         role="img"
-        aria-label="Silver 3D waste bin with an animated hinged lid"
+        aria-label="Green two-wheel municipal waste bin with an animated hinged lid"
         hidden={fallback}
       />
       {fallback && (
