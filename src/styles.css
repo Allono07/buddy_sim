@@ -218,6 +218,29 @@ small {
 .site-nav .active {
   color: var(--primary);
 }
+.site-nav .beta-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #ffdf00;
+  color: #173f2d;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+.hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.beta-button {
+  border-color: var(--primary);
+  color: var(--primary);
+}
 .founder {
   display: flex;
   align-items: center;

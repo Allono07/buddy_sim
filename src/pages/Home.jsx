@@ -26,7 +26,11 @@ export default function Home() {
           <motion.div
             className="hero-caption"
             initial={reduced ? false : { opacity: 0, y: 10 }}
-            animate={lidClosed || reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+            animate={
+              lidClosed || reduced
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 10 }
+            }
             transition={{
               duration: reduced ? 0 : 0.5,
               ease: [0.22, 1, 0.36, 1],
@@ -41,9 +45,17 @@ export default function Home() {
           </motion.div>
           <div className="hero-intro">
             <p>A live BBMP waste truck tracker/alert application</p>
-            <Link className="button primary" to="/simulationdashboard">
-              Open Simulation Dashboard <ArrowUpRight size={18} />
-            </Link>
+            <div className="hero-actions">
+              <Link className="button primary" to="/simulationdashboard">
+                Open Simulation Dashboard <ArrowUpRight size={18} />
+              </Link>
+              <a
+                className="button beta-button"
+                href="https://beta.trashbuddy.in"
+              >
+                Join Beta Program <ArrowUpRight size={18} />
+              </a>
+            </div>
           </div>
           <div className="location-tag">
             <MapPin size={16} /> MADE FOR BENGALURU
@@ -124,9 +136,14 @@ export default function Home() {
           <br />
           of Trash Buddy!
         </h2>
-        <Link className="button primary" to="/simulationdashboard">
-          Open Simulation Dashboard <ArrowUpRight size={18} />
-        </Link>
+        <div className="hero-actions">
+          <Link className="button primary" to="/simulationdashboard">
+            Open Simulation Dashboard <ArrowUpRight size={18} />
+          </Link>
+          <a className="button beta-button" href="https://beta.trashbuddy.in">
+            Join Beta Program <ArrowUpRight size={18} />
+          </a>
+        </div>
       </section>
     </>
   );

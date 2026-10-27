@@ -47,6 +47,9 @@ function Header() {
         </NavLink>
         <NavLink to="/yourstory">Your Story</NavLink>
         <NavLink to="/contact">Contact</NavLink>
+        <a className="beta-nav-link" href="https://beta.trashbuddy.in">
+          BETA <ArrowUpRight size={13} />
+        </a>
         <a
           className="founder"
           href="https://allenthomson.com"
@@ -96,6 +99,9 @@ function Footer() {
         </a>
         <a href="https://allenthomson.com" target="_blank" rel="noreferrer">
           Portfolio
+        </a>
+        <a href="https://beta.trashbuddy.in">
+          Join Beta Program <ArrowUpRight size={13} />
         </a>
         <Link to="/contact">Contact</Link>
       </div>
